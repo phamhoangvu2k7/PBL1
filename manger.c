@@ -81,3 +81,68 @@ void xoa_mat_hang() {
     printf("\n=> Da xoa %d mat hang co don vi '%s' va ma bat dau bang '%s'.\n", so_luong_xoa, input_don_vi, input_ma_hang);
 }
 
+void quan_ly_thue() {
+    int lua_chon, id;
+    float thue_nhap;
+
+    printf("\n--- QUAN LY THUE THU MUC ---\n");
+    printf("1. Xem danh sach thue\n");
+    printf("2. Sua thue\n");
+    printf("3. Xoa thue (Set ve 0%%)\n");
+    printf("Chon chuc nang: ");
+    scanf("%d", &lua_chon);
+
+    if (lua_chon == 1) {
+        printf("\n%-5s | %-20s | %-10s\n", "ID", "Ten Thu Muc", "Thue (%)");
+        printf("-------------------------------------------\n");
+        for (int i = 0; i < so_thu_muc; i++) {
+            printf("%-5d | %-20s | %.2f%%\n", ds_thu_muc[i].id, ds_thu_muc[i].ten_thu_muc, ds_thu_muc[i].thue * 100);
+        }
+        printf("\n");
+    }
+
+    else if (lua_chon == 2 || lua_chon == 3) {
+        printf("Nhap ID thu muc can thao tac: ");
+        scanf("%d", &id);
+        
+        for (int i = 0; i < so_thu_muc; i++) {
+            if (ds_thu_muc[i].id == id) {
+                
+                if (lua_chon == 2) {
+                    printf("Nhap muc thue moi (Nhap %% - vd gõ 10 cho 10%%): ");
+                    scanf("%f", &thue_nhap);
+                    
+                    ds_thu_muc[i].thue = thue_nhap / 100.0;
+                    printf("Da cap nhat thue thanh cong!\n");
+                } 
+                else {
+                    ds_thu_muc[i].thue = 0.0; // Xóa nghĩa là set thuế về 0
+                    printf("Da xoa thue (Set = 0%%)!\n");
+                }
+                
+                for(int j = 0; j < so_hang; j++) {
+                    if(danh_sach_hang[j].thu_muc_id == id) {
+                        tinh_thanh_tien(&danh_sach_hang[j]); 
+                    }
+                }
+                return; 
+            }
+        }
+        printf("Khong tim thay ID thu muc nay!\n");
+    }
+}
+
+void tao_du_lieu_mau() {
+    ds_thu_muc[0] = (ThuMuc){1, "Cong nghe", 0.10}; 
+    ds_thu_muc[1] = (ThuMuc){2, "Gia dung", 0.05};  
+    so_thu_muc = 2;
+
+    danh_sach_hang[0] = (PhieuNhap){"mh102", "Dien thoai", "cai", {15, 10, 2026}, 150, 1000, 1, 0}; 
+    danh_sach_hang[1] = (PhieuNhap){"mh105", "Tai nghe", "hop", {15, 10, 2026}, 50, 200, 1, 0}; // Món này gõ 'hop' & 'mh1' là bị xóa này
+    danh_sach_hang[2] = (PhieuNhap){"mh200", "Noi com dien", "cai", {16, 10, 2026}, 250, 500, 2, 0}; 
+    so_hang = 3;
+
+    for (int i = 0; i < so_hang; i++) {
+        tinh_thanh_tien(&danh_sach_hang[i]);
+    }
+}
