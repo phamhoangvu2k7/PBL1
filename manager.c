@@ -12,8 +12,8 @@ int so_hang = 0;
 // Get tax of category
 float thue_thu_muc(int category_id) {
     for (int i = 0; i < so_thu_muc; i++) {
-        if (danh_sach_thu_muc[i].id == category_id) 
-            return danh_sach_thu_muc[i].thue;
+        if (ds_thu_muc[i].id == category_id) 
+            return ds_thu_muc[i].thue;
     }
     return 0.0;
 }
@@ -47,7 +47,7 @@ void thong_ke_theo_ngay() {
                 da_duyet[j] = true; 
             }
         }
-        printf("Ngay %02d/%02d/%04d: %.2f VNĐ\n", ngay_dang_xet.ngay, ngay_dang_xet.thang, ngay_dang_xet.nam, tong_tien_ngay);
+        printf("Ngay %02d/%02d/%04d: %.2f VND\n", ngay_dang_xet.ngay, ngay_dang_xet.thang, ngay_dang_xet.nam, tong_tien_ngay);
     }
 }
 
@@ -109,7 +109,7 @@ void quan_ly_thue() {
             if (ds_thu_muc[i].id == id) {
                 
                 if (lua_chon == 2) {
-                    printf("Nhap muc thue moi (Nhap %% - vd gõ 10 cho 10%%): ");
+                    printf("Nhap muc thue moi (Nhap %% - vi du nhap 10 tuong ung 10%%): ");
                     scanf("%f", &thue_nhap);
                     
                     ds_thu_muc[i].thue = thue_nhap / 100.0;
@@ -138,7 +138,7 @@ void tao_du_lieu_mau() {
     so_thu_muc = 2;
 
     danh_sach_hang[0] = (PhieuNhap){"mh102", "Dien thoai", "cai", {15, 10, 2026}, 150, 1000, 1, 0}; 
-    danh_sach_hang[1] = (PhieuNhap){"mh105", "Tai nghe", "hop", {15, 10, 2026}, 50, 200, 1, 0}; // Món này gõ 'hop' & 'mh1' là bị xóa này
+    danh_sach_hang[1] = (PhieuNhap){"mh105", "Tai nghe", "hop", {15, 10, 2026}, 50, 200, 1, 0}; 
     danh_sach_hang[2] = (PhieuNhap){"mh200", "Noi com dien", "cai", {16, 10, 2026}, 250, 500, 2, 0}; 
     so_hang = 3;
 
