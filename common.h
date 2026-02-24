@@ -7,7 +7,7 @@
 typedef struct {
     int ngay;
     int thang;
-    int name;
+    int nam;
 } NgayThang;
 
 typedef struct {
