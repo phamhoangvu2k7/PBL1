@@ -3,7 +3,7 @@
 #include "manager.h"
 #include "utils.h"
 
-ThuMuc ds_thu_muc[MAX_CATEGORIES];
+ThuMuc danh_sach_thu_muc[MAX_CATEGORIES];
 int so_thu_muc = 0;
 
 PhieuNhap danh_sach_hang[MAX_PRODUCTS];
@@ -12,8 +12,8 @@ int so_hang = 0;
 // Get tax of category
 float thue_thu_muc(int category_id) {
     for (int i = 0; i < so_thu_muc; i++) {
-        if (ds_thu_muc[i].id == category_id) 
-            return ds_thu_muc[i].thue;
+        if (danh_sach_thu_muc[i].id == category_id) 
+            return danh_sach_thu_muc[i].thue;
     }
     return 0.0;
 }
@@ -32,22 +32,28 @@ void tinh_thanh_tien(PhieuNhap *phieu) {
 
 void thong_ke_tat_ca_san_pham() {
     printf("\n--- THONG KE TAT CA SAN PHAM ---\n");
-    printf("%-5s | %-10s | %-20s | %-10s | %-10s | %-15s | %-15s\n", "STT", "Ma Hang", "Ten Hang", "Don Vi", "So Luong", "Don Gia (VND)", "Thanh Tien (VND)");
-    printf("------------------------------------------------------------------------------------------------------\n");
+
+    printf("%-5s | %-10s | %-20s | %-10s | %-10s | %-15s | %-18s | %-8s | %-8s\n", 
+           "STT", "Ma Hang", "Ten Hang", "Don Vi", "So Luong", 
+           "Don Gia (VND)", "Thanh Tien (VND)", "ID Muc", "Thue(%)");
+    
+    printf("----------------------------------------------------------------------------------------------------------------------------------------\n");
 
     for (int i = 0; i < so_hang; i++) {
-        printf("%-5d | %-10s | %-20s | %-10s | %-10d | %15.2f | %15.2f\n",
+        printf("%-5d | %-10s | %-20s | %-10s | %-10d | %15.2f | %18.2f | %-8d | %-8.1f\n",
                i + 1,                          
                danh_sach_hang[i].ma_hang,      
                danh_sach_hang[i].ten_hang,     
                danh_sach_hang[i].don_vi,       
                danh_sach_hang[i].so_luong,     
                danh_sach_hang[i].don_gia,      
-               danh_sach_hang[i].thanh_tien    
+               danh_sach_hang[i].thanh_tien,   
+               danh_sach_hang[i].thu_muc_id,
+               thue_thu_muc(danh_sach_hang[i].thu_muc_id) * 100.0
         );
     }
     
-    printf("------------------------------------------------------------------------------------------------------\n");
+    printf("----------------------------------------------------------------------------------------------------------------------------------------\n");
     printf("\n");
 }
 
@@ -117,7 +123,7 @@ void quan_ly_thue() {
         printf("\n%-5s | %-20s | %-10s\n", "ID", "Ten Thu Muc", "Thue (%)");
         printf("-------------------------------------------\n");
         for (int i = 0; i < so_thu_muc; i++) {
-            printf("%-5d | %-20s | %.2f%%\n", ds_thu_muc[i].id, ds_thu_muc[i].ten_thu_muc, ds_thu_muc[i].thue * 100);
+            printf("%-5d | %-20s | %.2f%%\n", danh_sach_thu_muc[i].id, danh_sach_thu_muc[i].ten_thu_muc, danh_sach_thu_muc[i].thue * 100);
         }
         printf("\n");
     }
@@ -127,17 +133,17 @@ void quan_ly_thue() {
         scanf("%d", &id);
         
         for (int i = 0; i < so_thu_muc; i++) {
-            if (ds_thu_muc[i].id == id) {
+            if (danh_sach_thu_muc[i].id == id) {
                 
                 if (lua_chon == 2) {
                     printf("Nhap muc thue moi (Nhap %% - vi du nhap 10 tuong ung 10%%): ");
                     scanf("%f", &thue_nhap);
                     
-                    ds_thu_muc[i].thue = thue_nhap / 100.0;
+                    danh_sach_thu_muc[i].thue = thue_nhap / 100.0;
                     printf("Da cap nhat thue thanh cong!\n");
                 } 
                 else {
-                    ds_thu_muc[i].thue = 0.0; // Xóa nghĩa là set thuế về 0
+                    danh_sach_thu_muc[i].thue = 0.0; // Xóa nghĩa là set thuế về 0
                     printf("Da xoa thue (Set = 0%%)!\n");
                 }
                 
@@ -154,17 +160,21 @@ void quan_ly_thue() {
 }
 
 void nhap_san_pham() {
+    printf("\n--- NHAP SAN PHAM MOI ---\n");
+
     printf("Nhap ma hang: ");
     scanf("%s", danh_sach_hang[so_hang].ma_hang);
 
     printf("Nhap ten hang: ");
-    scanf("%s", danh_sach_hang[so_hang].ten_hang);
+    scanf(" %[^\n]", danh_sach_hang[so_hang].ten_hang); 
 
     printf("Nhap don vi: ");
-    scanf("%s", danh_sach_hang[so_hang].don_vi);
+    scanf("%s", danh_sach_hang[so_hang].don_vi); 
 
     printf("Nhap ngay nhap (dd/mm/yyyy): ");
-    scanf("%d/%d/%d", &danh_sach_hang[so_hang].ngay_nhap.ngay, &danh_sach_hang[so_hang].ngay_nhap.thang, &danh_sach_hang[so_hang].ngay_nhap.nam);
+    scanf("%d/%d/%d", &danh_sach_hang[so_hang].ngay_nhap.ngay, 
+                      &danh_sach_hang[so_hang].ngay_nhap.thang, 
+                      &danh_sach_hang[so_hang].ngay_nhap.nam);
 
     printf("Nhap so luong: ");
     scanf("%d", &danh_sach_hang[so_hang].so_luong);
@@ -172,13 +182,38 @@ void nhap_san_pham() {
     printf("Nhap don gia: ");
     scanf("%f", &danh_sach_hang[so_hang].don_gia);
 
+    ThuMuc product;
     printf("Nhap thu muc: ");
-    scanf("%d", &danh_sach_hang[so_hang].thu_muc_id);
+    scanf(" %[^\n]", product.ten_thu_muc); 
+
+    int category_id = kiem_tra_thu_muc(product, danh_sach_thu_muc, so_thu_muc);
+
+    if (category_id != 0){
+        danh_sach_hang[so_hang].thu_muc_id = category_id;
+        tinh_thanh_tien(&danh_sach_hang[so_hang]);
+        printf("-> Da them vao thu muc (ID: %d)\n", category_id);
+    }
+    else {
+        printf("Thu muc moi. Vui long nhap thue cho thuc muc moi: ");
+        scanf("%f", &product.thue);
+
+        danh_sach_thu_muc[so_thu_muc].id = so_thu_muc + 1; 
+        strcpy(danh_sach_thu_muc[so_thu_muc].ten_thu_muc, product.ten_thu_muc);
+        danh_sach_thu_muc[so_thu_muc].thue = product.thue / 100;
+        
+        danh_sach_hang[so_hang].thu_muc_id = danh_sach_thu_muc[so_thu_muc].id;
+        tinh_thanh_tien(&danh_sach_hang[so_hang]);
+        
+        so_thu_muc++;
+    }
+
+    so_hang++;
+    printf("Nhap san pham thanh cong!\n");
 }
 
 void tao_du_lieu_mau() {
-    ds_thu_muc[0] = (ThuMuc){1, "Cong nghe", 0.10}; 
-    ds_thu_muc[1] = (ThuMuc){2, "Gia dung", 0.05};  
+    danh_sach_thu_muc[0] = (ThuMuc){1, "Cong nghe", 0.10}; 
+    danh_sach_thu_muc[1] = (ThuMuc){2, "Gia dung", 0.05};  
     so_thu_muc = 2;
 
     danh_sach_hang[0] = (PhieuNhap){"mh102", "Dien thoai", "cai", {15, 10, 2026}, 150, 1000, 1, 0}; 
