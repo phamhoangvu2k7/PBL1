@@ -30,6 +30,27 @@ void tinh_thanh_tien(PhieuNhap *phieu) {
     phieu->thanh_tien = tien_sau_giam * (1.0 + thue);
 }
 
+void thong_ke_tat_ca_san_pham() {
+    printf("\n--- THONG KE TAT CA SAN PHAM ---\n");
+    printf("%-5s | %-10s | %-20s | %-10s | %-10s | %-15s | %-15s\n", "STT", "Ma Hang", "Ten Hang", "Don Vi", "So Luong", "Don Gia (VND)", "Thanh Tien (VND)");
+    printf("------------------------------------------------------------------------------------------------------\n");
+
+    for (int i = 0; i < so_hang; i++) {
+        printf("%-5d | %-10s | %-20s | %-10s | %-10d | %15.2f | %15.2f\n",
+               i + 1,                          
+               danh_sach_hang[i].ma_hang,      
+               danh_sach_hang[i].ten_hang,     
+               danh_sach_hang[i].don_vi,       
+               danh_sach_hang[i].so_luong,     
+               danh_sach_hang[i].don_gia,      
+               danh_sach_hang[i].thanh_tien    
+        );
+    }
+    
+    printf("------------------------------------------------------------------------------------------------------\n");
+    printf("\n");
+}
+
 void thong_ke_theo_ngay() {
     printf("\n--- THONG KE TONG TIEN THEO NGAY ---\n");
     
@@ -88,7 +109,7 @@ void quan_ly_thue() {
     printf("\n--- QUAN LY THUE THU MUC ---\n");
     printf("1. Xem danh sach thue\n");
     printf("2. Sua thue\n");
-    printf("3. Xoa thue (Set ve 0%%)\n");
+    printf("3. Xoa thue\n");
     printf("Chon chuc nang: ");
     scanf("%d", &lua_chon);
 
