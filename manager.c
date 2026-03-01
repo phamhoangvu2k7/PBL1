@@ -88,7 +88,7 @@ void xoa_mat_hang() {
     int so_luong_xoa = 0;
 
     while(i < so_hang) {
-        if (strcmp(danh_sach_hang[i].don_vi, input_don_vi) == 0 && start_with(danh_sach_hang[i].ma_hang, input_ma_hang)) {
+        if (start_with(danh_sach_hang[i].don_vi, input_don_vi) && start_with(danh_sach_hang[i].ma_hang, input_ma_hang)) {
             for (int j = i; j < so_hang - 1; j++) {
                 danh_sach_hang[j] = danh_sach_hang[j + 1];
             }
@@ -151,6 +151,29 @@ void quan_ly_thue() {
         }
         printf("Khong tim thay ID thu muc nay!\n");
     }
+}
+
+void nhap_san_pham() {
+    printf("Nhap ma hang: ");
+    scanf("%s", danh_sach_hang[so_hang].ma_hang);
+
+    printf("Nhap ten hang: ");
+    scanf("%s", danh_sach_hang[so_hang].ten_hang);
+
+    printf("Nhap don vi: ");
+    scanf("%s", danh_sach_hang[so_hang].don_vi);
+
+    printf("Nhap ngay nhap (dd/mm/yyyy): ");
+    scanf("%d/%d/%d", &danh_sach_hang[so_hang].ngay_nhap.ngay, &danh_sach_hang[so_hang].ngay_nhap.thang, &danh_sach_hang[so_hang].ngay_nhap.nam);
+
+    printf("Nhap so luong: ");
+    scanf("%d", &danh_sach_hang[so_hang].so_luong);
+
+    printf("Nhap don gia: ");
+    scanf("%f", &danh_sach_hang[so_hang].don_gia);
+
+    printf("Nhap thu muc: ");
+    scanf("%d", &danh_sach_hang[so_hang].thu_muc_id);
 }
 
 void tao_du_lieu_mau() {
