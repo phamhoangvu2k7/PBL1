@@ -1,12 +1,14 @@
 #include <stdio.h>
-#include <string.h>
+#include <my_string.h>
+#include <stdlib.h>
 #include "manager.h"
 #include "utils.h"
 
 ThuMuc ds_thu_muc[MAX_CATEGORIES];
 int so_thu_muc = 0;
 
-PhieuNhap danh_sach_hang[MAX_PRODUCTS];
+Node* danh_sach_hang = NULL;
+Node* cuoi_danh_sach;
 int so_hang = 0;
 
 // Get tax of category
@@ -33,21 +35,58 @@ void tinh_thanh_tien(PhieuNhap *phieu) {
 void thong_ke_theo_ngay() {
     printf("\n--- THONG KE TONG TIEN THEO NGAY ---\n");
     
-    bool da_duyet[MAX_PRODUCTS] = {false};
+    //thay doi bool o day
+    // int da_duyet[MAX_PRODUCTS];
+    // for(int i = 0; i< MAX_PRODUCTS; i++) da_duyet[i] = 0;
 
-    for (int i = 0; i < so_hang; i++) {
-        if (da_duyet[i]) continue; 
+    // for (int i = 0; i < so_hang; i++) {
+    //     if (da_duyet[i]) continue; 
 
-        NgayThang ngay_dang_xet = danh_sach_hang[i].ngay_nhap;
+    //     NgayThang ngay_dang_xet = danh_sach_hang[i].ngay_nhap;
+    //     float tong_tien_ngay = 0;
+
+    //     for (int j = i; j < so_hang; j++) {
+    //         if (cung_ngay(danh_sach_hang[j].ngay_nhap, ngay_dang_xet)) {
+    //             tong_tien_ngay += danh_sach_hang[j].thanh_tien;
+    //             da_duyet[j] = 1; 
+    //         }
+    //     }
+    //     printf("Ngay %02d/%02d/%04d: %.2f VND\n", ngay_dang_xet.ngay, ngay_dang_xet.thang, ngay_dang_xet.nam, tong_tien_ngay);
+    // }
+
+
+    int da_duyet[so_hang+1];
+    for(int i = 0; i< so_hang; i++){
+        da_duyet[i] = 0;
+    }
+
+    int i = 0;
+    Node* curNodei = danh_sach_hang;
+    while(i < so_hang){
+        if(da_duyet[i]){
+            i++;
+            curNodei = curNodei->next;
+            continue;
+        }
+
+        NgayThang ngay_dang_xet = curNodei->value->ngay_nhap;
         float tong_tien_ngay = 0;
 
-        for (int j = i; j < so_hang; j++) {
-            if (cung_ngay(danh_sach_hang[j].ngay_nhap, ngay_dang_xet)) {
-                tong_tien_ngay += danh_sach_hang[j].thanh_tien;
-                da_duyet[j] = true; 
+        int j = i;
+        Node* curNodej = curNodei;
+
+        while(j < so_hang){
+            if (cung_ngay(curNodei->value->ngay_nhap, curNodej->value->ngay_nhap)) {
+
+                tong_tien_ngay += curNodej->value->thanh_tien;
+                da_duyet[j] = 1; 
             }
+            j++;
+
+            curNodej = curNodej->next;
         }
-        printf("Ngay %02d/%02d/%04d: %.2f VND\n", ngay_dang_xet.ngay, ngay_dang_xet.thang, ngay_dang_xet.nam, tong_tien_ngay);
+        i++;
+        curNodei = curNodei->next;
     }
 }
 
@@ -56,25 +95,49 @@ void xoa_mat_hang() {
     char input_ma_hang[20];
 
     printf("\n--- XOA MAT HANG ---\n");
-    
     printf("Nhap don vi can xoa: ");
     scanf("%s", input_don_vi); 
-
     printf("Nhap ma hang can xoa: ");
     scanf("%s", input_ma_hang); 
 
-    int i = 0; 
     int so_luong_xoa = 0;
+    Node *curNode = danh_sach_hang;
+    Node *prev = NULL;
 
-    while(i < so_hang) {
-        if (strcmp(danh_sach_hang[i].don_vi, input_don_vi) == 0 && start_with(danh_sach_hang[i].ma_hang, input_ma_hang)) {
-            for (int j = i; j < so_hang - 1; j++) {
-                danh_sach_hang[j] = danh_sach_hang[j + 1];
+    while (curNode != NULL) {
+        PhieuNhap *p = curNode->value;
+        
+        int n = string_len(p->don_vi, 20);
+        int m = string_len(input_don_vi, 20);
+        if (string_cmp(p->don_vi, input_don_vi, n, m) == 0 
+            && string_head_dup(p->ma_hang, input_ma_hang, n)) {
+            
+            Node *temp = curNode; 
+            
+            // xoa curnode di
+            if (prev == NULL) {
+                danh_sach_hang = curNode->next;
+                curNode = danh_sach_hang;
             }
+            else{
+                prev->next = curNode->next;
+                //nhay qua thang tiep theo de tinh
+                curNode = prev->next;
+            }
+
+            if (temp == cuoi_danh_sach) {
+                cuoi_danh_sach = prev;
+            }
+
+            free(temp->value); 
+            free(temp);
             so_hang--;
             so_luong_xoa++;
-        } else {
-            ++i;
+        }
+        else{
+            prev = curNode;
+            //xet tiep node tiep theo
+            curNode = curNode->next;
         }
     }
 
@@ -99,50 +162,95 @@ void quan_ly_thue() {
             printf("%-5d | %-20s | %.2f%%\n", ds_thu_muc[i].id, ds_thu_muc[i].ten_thu_muc, ds_thu_muc[i].thue * 100);
         }
         printf("\n");
-    }
-
+    } 
     else if (lua_chon == 2 || lua_chon == 3) {
         printf("Nhap ID thu muc can thao tac: ");
         scanf("%d", &id);
         
+        int tim_thay = 0;
         for (int i = 0; i < so_thu_muc; i++) {
             if (ds_thu_muc[i].id == id) {
-                
+                tim_thay = 1;
                 if (lua_chon == 2) {
-                    printf("Nhap muc thue moi (Nhap %% - vi du nhap 10 tuong ung 10%%): ");
+                    printf("Nhap muc thue moi (Vi du nhap 10 cho 10%%): ");
                     scanf("%f", &thue_nhap);
-                    
                     ds_thu_muc[i].thue = thue_nhap / 100.0;
                     printf("Da cap nhat thue thanh cong!\n");
-                } 
-                else {
-                    ds_thu_muc[i].thue = 0.0; // Xóa nghĩa là set thuế về 0
+                } else {
+                    ds_thu_muc[i].thue = 0.0;
                     printf("Da xoa thue (Set = 0%%)!\n");
                 }
                 
-                for(int j = 0; j < so_hang; j++) {
-                    if(danh_sach_hang[j].thu_muc_id == id) {
-                        tinh_thanh_tien(&danh_sach_hang[j]); 
+                // Duyệt danh sách liên kết để cập nhật lại thành tiền
+                Node *curr = danh_sach_hang;
+                while (curr != NULL) {
+                    if (curr->value->thu_muc_id == id) {
+                        tinh_thanh_tien(curr->value); 
                     }
+                    curr = curr->next;
                 }
-                return; 
+                break; 
             }
         }
-        printf("Khong tim thay ID thu muc nay!\n");
+        
+        if (!tim_thay) {
+            printf("Khong tim thay ID thu muc nay!\n");
+        }
     }
 }
 
-void tao_du_lieu_mau() {
-    ds_thu_muc[0] = (ThuMuc){1, "Cong nghe", 0.10}; 
-    ds_thu_muc[1] = (ThuMuc){2, "Gia dung", 0.05};  
-    so_thu_muc = 2;
+// void tao_du_lieu_mau() {
+//     ds_thu_muc[0] = (ThuMuc){1, "Cong nghe", 0.10}; 
+//     ds_thu_muc[1] = (ThuMuc){2, "Gia dung", 0.05};  
+//     so_thu_muc = 2;
 
-    danh_sach_hang[0] = (PhieuNhap){"mh102", "Dien thoai", "cai", {15, 10, 2026}, 150, 1000, 1, 0}; 
-    danh_sach_hang[1] = (PhieuNhap){"mh105", "Tai nghe", "hop", {15, 10, 2026}, 50, 200, 1, 0}; 
-    danh_sach_hang[2] = (PhieuNhap){"mh200", "Noi com dien", "cai", {16, 10, 2026}, 250, 500, 2, 0}; 
-    so_hang = 3;
+//     danh_sach_hang[0] = (PhieuNhap){"mh102", "Dien thoai", "cai", {15, 10, 2026}, 150, 1000, 1, 0}; 
+//     danh_sach_hang[1] = (PhieuNhap){"mh105", "Tai nghe", "hop", {15, 10, 2026}, 50, 200, 1, 0}; 
+//     danh_sach_hang[2] = (PhieuNhap){"mh200", "Noi com dien", "cai", {16, 10, 2026}, 250, 500, 2, 0}; 
+//     so_hang = 3;
 
-    for (int i = 0; i < so_hang; i++) {
-        tinh_thanh_tien(&danh_sach_hang[i]);
+//     for (int i = 0; i < so_hang; i++) {
+//         tinh_thanh_tien(&danh_sach_hang[i]);
+//     }
+// }
+
+void nhap_hang(){
+    Node *phieu_nhap_new = (Node*)malloc(sizeof(Node));
+    phieu_nhap_new->value = (PhieuNhap*)malloc(sizeof(PhieuNhap));
+
+    printf("Nhap Ma Hang: \n");
+    scanf("%s", phieu_nhap_new->value->ma_hang);
+
+    printf("Nhap Ten Hang: \n");
+    scanf("%s", phieu_nhap_new->value->ten_hang);
+
+    printf("Nhap So Luong: \n");
+    scanf("%d", &phieu_nhap_new->value->so_luong);
+
+    printf("Nhap Ngay Nhap : ngay - thang -nam: \n");
+    NgayThang date;
+    scanf("%d %d %d", &date.ngay, &date.thang, &date.nam);
+    phieu_nhap_new->value->ngay_nhap = date;
+
+    printf("Nhap Don Vi: \n");
+    scanf("%s", phieu_nhap_new->value->don_vi);
+
+    printf("Nhap Don Gia: \n");
+    scanf("%f", &phieu_nhap_new->value->don_gia);
+
+    printf("Nhap ID Thu Muc: "); scanf("%d", &phieu_nhap_new->value->thu_muc_id);
+
+    tinh_thanh_tien(phieu_nhap_new->value);
+
+    phieu_nhap_new->next = NULL;
+
+    if(danh_sach_hang == NULL){
+        danh_sach_hang = cuoi_danh_sach =  phieu_nhap_new;
     }
+    else{
+        cuoi_danh_sach->next = phieu_nhap_new;
+        cuoi_danh_sach = phieu_nhap_new;
+    }
+
+    so_hang++;
 }

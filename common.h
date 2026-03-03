@@ -28,6 +28,11 @@ typedef struct {
     float thanh_tien;
 } PhieuNhap;
 
+typedef struct{
+    PhieuNhap* value;
+    Node* next;
+}Node;
+
 extern ThuMuc danh_sach_thu_muc[MAX_CATEGORIES];
 extern int so_thu_muc;
 
