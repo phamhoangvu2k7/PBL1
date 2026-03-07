@@ -8,9 +8,10 @@ int main() {
 
     do {
         printf("\n====== HE THONG QUAN LY KHO ======\n");
-        printf("1. Thong ke tong tien theo ngay\n");
-        printf("2. Xoa mat hang theo dieu kien\n");
-        printf("3. Quan ly thue thu muc (Xem, Sua, Xoa)\n");
+        printf("1. Tao phieu nhap kho \n");
+        printf("2. Thong ke tong tien theo ngay\n");
+        printf("3. Xoa mat hang theo dieu kien\n");
+        printf("4. Quan ly thue thu muc (Xem, Sua, Xoa)\n");
         printf("0. Thoat chuong trinh\n");
         printf("====================================\n");
         printf("Chon chuc nang: ");
@@ -18,12 +19,15 @@ int main() {
 
         switch (chuc_nang) {
             case 1:
+                nhap_hang();
+                break;
+            case 2:
                 thong_ke_theo_ngay();
                 break; 
-            case 2:
+            case 3:
                 xoa_mat_hang();
                 break;
-            case 3:
+            case 4:
                 quan_ly_thue();
                 break;
             case 0:

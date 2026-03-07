@@ -82,7 +82,7 @@ void thong_ke_theo_ngay() {
         curNodei = curNodei->next;
 
         printf("-----DATE: %d - %d - %d: ---- ", ngay_dang_xet.ngay, ngay_dang_xet.thang, ngay_dang_xet.nam);
-        printf("Tong Tien:  %f \n", tong_tien_ngay);
+        printf("Tong Tien:  %0.2f \n", tong_tien_ngay);
     }
 }
 
@@ -231,24 +231,24 @@ void nhap_hang(){
     struct Node *phieu_nhap_new = (struct Node*)malloc(sizeof(struct Node));
     phieu_nhap_new->value = (PhieuNhap*)malloc(sizeof(PhieuNhap));
 
-    printf("Nhap Ma Hang: \n");
+    printf("Nhap Ma Hang: ");
     scanf("%s", phieu_nhap_new->value->ma_hang);
 
-    printf("Nhap Ten Hang: \n");
+    printf("Nhap Ten Hang: ");
     scanf("%s", phieu_nhap_new->value->ten_hang);
 
-    printf("Nhap So Luong: \n");
+    printf("Nhap So Luong: ");
     scanf("%d", &phieu_nhap_new->value->so_luong);
 
-    printf("Nhap Ngay Nhap : ngay - thang -nam: \n");
+    printf("Nhap Ngay Nhap : ngay - thang -nam: ");
     NgayThang date;
     scanf("%d %d %d", &date.ngay, &date.thang, &date.nam);
     phieu_nhap_new->value->ngay_nhap = date;
 
-    printf("Nhap Don Vi: \n");
+    printf("Nhap Don Vi: ");
     scanf("%s", phieu_nhap_new->value->don_vi);
 
-    printf("Nhap Don Gia: \n");
+    printf("Nhap Don Gia: ");
     scanf("%f", &phieu_nhap_new->value->don_gia);
 
     printf("Nhap ID Thu Muc: "); scanf("%d", &phieu_nhap_new->value->thu_muc_id);
