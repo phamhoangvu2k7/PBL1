@@ -1,16 +1,29 @@
 #include <stdio.h>
-#include <my_string.h>
 #include <stdlib.h>
+#include "my_string.h"
+#include "common.h"
 #include "manager.h"
 #include "utils.h"
 
 ThuMuc ds_thu_muc[MAX_CATEGORIES];
 int so_thu_muc = 0;
 
-Node* danh_sach_hang = NULL;
-Node* cuoi_danh_sach;
+struct Node* danh_sach_hang = NULL;
+struct Node* cuoi_danh_sach;
 int so_hang = 0;
 
+void createNode(char ma_hang[], char ten_hang[], char don_vi[], NgayThang ngay_nhap, int so_luong, float don_gia, int thu_muc_id, float thanh_tien, struct Node* newNode){
+    newNode->value = (PhieuNhap*)malloc(sizeof(PhieuNhap));
+    strcpy(newNode->value->ma_hang, ma_hang);
+    strcpy(newNode->value->ten_hang, ten_hang);
+    strcpy(newNode->value->don_vi, don_vi);
+    newNode->value->ngay_nhap = ngay_nhap;
+    newNode->value->so_luong = so_luong;
+    newNode->value->don_gia = don_gia;
+    newNode->value->thu_muc_id = thu_muc_id;
+    newNode->value->thanh_tien = thanh_tien;
+
+}
 // Get tax of category
 float thue_thu_muc(int category_id) {
     for (int i = 0; i < so_thu_muc; i++) {
@@ -34,26 +47,6 @@ void tinh_thanh_tien(PhieuNhap *phieu) {
 
 void thong_ke_theo_ngay() {
     printf("\n--- THONG KE TONG TIEN THEO NGAY ---\n");
-    
-    //thay doi bool o day
-    // int da_duyet[MAX_PRODUCTS];
-    // for(int i = 0; i< MAX_PRODUCTS; i++) da_duyet[i] = 0;
-
-    // for (int i = 0; i < so_hang; i++) {
-    //     if (da_duyet[i]) continue; 
-
-    //     NgayThang ngay_dang_xet = danh_sach_hang[i].ngay_nhap;
-    //     float tong_tien_ngay = 0;
-
-    //     for (int j = i; j < so_hang; j++) {
-    //         if (cung_ngay(danh_sach_hang[j].ngay_nhap, ngay_dang_xet)) {
-    //             tong_tien_ngay += danh_sach_hang[j].thanh_tien;
-    //             da_duyet[j] = 1; 
-    //         }
-    //     }
-    //     printf("Ngay %02d/%02d/%04d: %.2f VND\n", ngay_dang_xet.ngay, ngay_dang_xet.thang, ngay_dang_xet.nam, tong_tien_ngay);
-    // }
-
 
     int da_duyet[so_hang+1];
     for(int i = 0; i< so_hang; i++){
@@ -61,7 +54,7 @@ void thong_ke_theo_ngay() {
     }
 
     int i = 0;
-    Node* curNodei = danh_sach_hang;
+    struct Node* curNodei = danh_sach_hang;
     while(i < so_hang){
         if(da_duyet[i]){
             i++;
@@ -73,7 +66,7 @@ void thong_ke_theo_ngay() {
         float tong_tien_ngay = 0;
 
         int j = i;
-        Node* curNodej = curNodei;
+        struct Node* curNodej = curNodei;
 
         while(j < so_hang){
             if (cung_ngay(curNodei->value->ngay_nhap, curNodej->value->ngay_nhap)) {
@@ -87,6 +80,9 @@ void thong_ke_theo_ngay() {
         }
         i++;
         curNodei = curNodei->next;
+
+        printf("-----DATE: %d - %d - %d: ---- ", ngay_dang_xet.ngay, ngay_dang_xet.thang, ngay_dang_xet.nam);
+        printf("Tong Tien:  %f \n", tong_tien_ngay);
     }
 }
 
@@ -101,8 +97,8 @@ void xoa_mat_hang() {
     scanf("%s", input_ma_hang); 
 
     int so_luong_xoa = 0;
-    Node *curNode = danh_sach_hang;
-    Node *prev = NULL;
+    struct Node *curNode = danh_sach_hang;
+    struct Node *prev = NULL;
 
     while (curNode != NULL) {
         PhieuNhap *p = curNode->value;
@@ -112,7 +108,7 @@ void xoa_mat_hang() {
         if (string_cmp(p->don_vi, input_don_vi, n, m) == 0 
             && string_head_dup(p->ma_hang, input_ma_hang, n)) {
             
-            Node *temp = curNode; 
+            struct Node *temp = curNode; 
             
             // xoa curnode di
             if (prev == NULL) {
@@ -182,7 +178,7 @@ void quan_ly_thue() {
                 }
                 
                 // Duyệt danh sách liên kết để cập nhật lại thành tiền
-                Node *curr = danh_sach_hang;
+                struct Node *curr = danh_sach_hang;
                 while (curr != NULL) {
                     if (curr->value->thu_muc_id == id) {
                         tinh_thanh_tien(curr->value); 
@@ -199,23 +195,40 @@ void quan_ly_thue() {
     }
 }
 
-// void tao_du_lieu_mau() {
-//     ds_thu_muc[0] = (ThuMuc){1, "Cong nghe", 0.10}; 
-//     ds_thu_muc[1] = (ThuMuc){2, "Gia dung", 0.05};  
-//     so_thu_muc = 2;
+void tao_du_lieu_mau() {
+    ds_thu_muc[0] = (ThuMuc){1, "Cong nghe", 0.10}; 
+    ds_thu_muc[1] = (ThuMuc){2, "Gia dung", 0.05};  
+    so_thu_muc = 2;
 
-//     danh_sach_hang[0] = (PhieuNhap){"mh102", "Dien thoai", "cai", {15, 10, 2026}, 150, 1000, 1, 0}; 
-//     danh_sach_hang[1] = (PhieuNhap){"mh105", "Tai nghe", "hop", {15, 10, 2026}, 50, 200, 1, 0}; 
-//     danh_sach_hang[2] = (PhieuNhap){"mh200", "Noi com dien", "cai", {16, 10, 2026}, 250, 500, 2, 0}; 
-//     so_hang = 3;
+    struct Node* newNode1 = (struct Node*)malloc(sizeof(struct Node));
+    createNode("mh102", "Dien thoai", "cai", (NgayThang){15, 10, 2026}, 150, 1000, 1, 0, newNode1);
+    tinh_thanh_tien(newNode1->value);
+    danh_sach_hang = newNode1;
 
-//     for (int i = 0; i < so_hang; i++) {
-//         tinh_thanh_tien(&danh_sach_hang[i]);
-//     }
-// }
+    struct Node* newNode2 = (struct Node*)malloc(sizeof(struct Node));
+    createNode("mh105", "Tai nghe", "hop", (NgayThang){15, 10, 2026}, 50, 200, 1, 0, newNode2);
+    tinh_thanh_tien(newNode2->value);
+    newNode1->next = newNode2;
+
+    struct Node* newNode3 = (struct Node*)malloc(sizeof(struct Node));
+    createNode("mh200", "Noi com dien", "cai", (NgayThang){16, 10, 2026}, 250, 500, 2, 0, newNode3);
+    tinh_thanh_tien(newNode3->value);
+    newNode2->next = newNode3;
+
+    struct Node* newNode4 = (struct Node*)malloc(sizeof(struct Node));
+    createNode("mh300", "Binh nong lanh", "cai", (NgayThang){16, 10, 2026}, 300, 300, 2, 0, newNode4);
+    tinh_thanh_tien(newNode4->value);
+    newNode3->next = newNode4;
+
+    cuoi_danh_sach = newNode4;
+    so_hang = 4;
+    newNode4->next = NULL;
+
+
+}
 
 void nhap_hang(){
-    Node *phieu_nhap_new = (Node*)malloc(sizeof(Node));
+    struct Node *phieu_nhap_new = (struct Node*)malloc(sizeof(struct Node));
     phieu_nhap_new->value = (PhieuNhap*)malloc(sizeof(PhieuNhap));
 
     printf("Nhap Ma Hang: \n");

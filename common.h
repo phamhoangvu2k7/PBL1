@@ -3,7 +3,8 @@
 
 #define MAX_PRODUCTS 100
 #define MAX_CATEGORIES 20
-
+#include <stdlib.h>
+#include <string.h>
 typedef struct {
     int ngay;
     int thang;
@@ -28,15 +29,13 @@ typedef struct {
     float thanh_tien;
 } PhieuNhap;
 
-typedef struct{
+
+struct Node{
     PhieuNhap* value;
-    Node* next;
-}Node;
+    struct Node* next;
 
-extern ThuMuc danh_sach_thu_muc[MAX_CATEGORIES];
-extern int so_thu_muc;
+};
 
-extern PhieuNhap danh_sach_hang[MAX_PRODUCTS];
-extern int so_hang;
+
 
 #endif
