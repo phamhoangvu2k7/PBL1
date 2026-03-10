@@ -33,27 +33,39 @@ void tinh_thanh_tien(PhieuNhap *phieu) {
 void thong_ke_tat_ca_san_pham() {
     printf("\n--- THONG KE TAT CA SAN PHAM ---\n");
 
-    printf("%-5s | %-10s | %-20s | %-10s | %-10s | %-15s | %-18s | %-8s | %-8s\n", 
-           "STT", "Ma Hang", "Ten Hang", "Don Vi", "So Luong", 
-           "Don Gia (VND)", "Thanh Tien (VND)", "ID Muc", "Thue(%)");
-    
-    printf("----------------------------------------------------------------------------------------------------------------------------------------\n");
+    printf("%-5s | %-10s | %-20s | %-10s | %-10s | %-10s | %-15s | %-18s | %-15s | %-8s | %-8s\n",
+           "STT", "Ma Hang", "Ten Hang", "Don Vi", "So Luong",
+           "Ngay Nhap", "Dien Tich (m2)", "Don Gia (VND)", "Thanh Tien (VND)",
+           "ID Muc", "Thue");
 
+    printf("---------------------------------------------------------------------------------------------------------------\
+------------------------------------------------\n");
+
+    float tong_dien_tich = 0.0f;
     for (int i = 0; i < so_hang; i++) {
-        printf("%-5d | %-10s | %-20s | %-10s | %-10d | %15.2f | %18.2f | %-8d | %-8.1f\n",
-               i + 1,                          
-               danh_sach_hang[i].ma_hang,      
-               danh_sach_hang[i].ten_hang,     
-               danh_sach_hang[i].don_vi,       
-               danh_sach_hang[i].so_luong,     
-               danh_sach_hang[i].don_gia,      
-               danh_sach_hang[i].thanh_tien,   
+        printf("%-5d | %-10s | %-20s | %-10s | %-10d | %02d/%02d/%04d | %-15.2f | %18.2f | %15.2f | %-8d | %-8.1f\n",
+               i + 1,
+               danh_sach_hang[i].ma_hang,
+               danh_sach_hang[i].ten_hang,
+               danh_sach_hang[i].don_vi,
+               danh_sach_hang[i].so_luong,
+               danh_sach_hang[i].ngay_nhap.ngay,
+               danh_sach_hang[i].ngay_nhap.thang,
+               danh_sach_hang[i].ngay_nhap.nam,
+               danh_sach_hang[i].dien_tich,
+               danh_sach_hang[i].don_gia,
+               danh_sach_hang[i].thanh_tien,
                danh_sach_hang[i].thu_muc_id,
-               thue_thu_muc(danh_sach_hang[i].thu_muc_id) * 100.0
-        );
+               thue_thu_muc(danh_sach_hang[i].thu_muc_id) * 100.0);
+
+        tong_dien_tich += danh_sach_hang[i].dien_tich * danh_sach_hang[i].so_luong;
     }
     
-    printf("----------------------------------------------------------------------------------------------------------------------------------------\n");
+    printf("---------------------------------------------------------------------------------------------------------------\
+------------------------------------------------\n");
+    printf("Tong dien tich toan bo san pham: %.2f m2\n", tong_dien_tich);
+    printf("Dien tich kho chua: %.2f m2\n", dien_tich_kho);
+    printf("Dien tich con lai trong kho: %.2f m2\n", dien_tich_kho - tong_dien_tich);
     printf("\n");
 }
 
@@ -179,36 +191,51 @@ void nhap_san_pham() {
     printf("Nhap so luong: ");
     scanf("%d", &danh_sach_hang[so_hang].so_luong);
 
+    printf("Nhap dien tich: ");
+    scanf("%f", &danh_sach_hang[so_hang].dien_tich);
+
     printf("Nhap don gia: ");
     scanf("%f", &danh_sach_hang[so_hang].don_gia);
 
-    ThuMuc product;
-    printf("Nhap thu muc: ");
-    scanf(" %[^\n]", product.ten_thu_muc); 
-
-    int category_id = kiem_tra_thu_muc(product, danh_sach_thu_muc, so_thu_muc);
-
-    if (category_id != 0){
-        danh_sach_hang[so_hang].thu_muc_id = category_id;
-        tinh_thanh_tien(&danh_sach_hang[so_hang]);
-        printf("-> Da them vao thu muc (ID: %d)\n", category_id);
+    if (kiem_tra_kho_chua(danh_sach_hang[so_hang].dien_tich * danh_sach_hang[so_hang].so_luong)) {
+        ThuMuc product;
+        printf("Nhap thu muc: ");
+        scanf(" %[^\n]", product.ten_thu_muc); 
+    
+        int category_id = kiem_tra_thu_muc(product, danh_sach_thu_muc, so_thu_muc);
+    
+        if (category_id != 0){
+            danh_sach_hang[so_hang].thu_muc_id = category_id;
+            tinh_thanh_tien(&danh_sach_hang[so_hang]);
+            printf("-> Da them vao thu muc (ID: %d)\n", category_id);
+        }
+        else {
+            printf("Thu muc moi. Vui long nhap thue cho thuc muc moi: ");
+            scanf("%f", &product.thue);
+    
+            danh_sach_thu_muc[so_thu_muc].id = so_thu_muc + 1; 
+            strcpy(danh_sach_thu_muc[so_thu_muc].ten_thu_muc, product.ten_thu_muc);
+            danh_sach_thu_muc[so_thu_muc].thue = product.thue / 100;
+            
+            danh_sach_hang[so_hang].thu_muc_id = danh_sach_thu_muc[so_thu_muc].id;
+            tinh_thanh_tien(&danh_sach_hang[so_hang]);
+            
+            so_thu_muc++;
+        }
+    
+        so_hang++;
+        printf("Nhap san pham thanh cong!\n");
     }
     else {
-        printf("Thu muc moi. Vui long nhap thue cho thuc muc moi: ");
-        scanf("%f", &product.thue);
-
-        danh_sach_thu_muc[so_thu_muc].id = so_thu_muc + 1; 
-        strcpy(danh_sach_thu_muc[so_thu_muc].ten_thu_muc, product.ten_thu_muc);
-        danh_sach_thu_muc[so_thu_muc].thue = product.thue / 100;
-        
-        danh_sach_hang[so_hang].thu_muc_id = danh_sach_thu_muc[so_thu_muc].id;
-        tinh_thanh_tien(&danh_sach_hang[so_hang]);
-        
-        so_thu_muc++;
+        printf("Dien tich cua lo hang lon hon nhieu so voi dien tich kho chua. Vui long nhap lai san pham hoac ban co the cap nhat lai dien tich kho chua!");
     }
+}
 
-    so_hang++;
-    printf("Nhap san pham thanh cong!\n");
+void nhap_dien_tich_kho_chua() {
+    printf("\n--- CAP NHAT DIEN TICH KHO CHUA ---\n");
+    printf("Nhap dien tich kho: ");
+    scanf("%f", &dien_tich_kho);
+    printf("Cap nhat thanh cong: %.2f\n", dien_tich_kho);
 }
 
 void tao_du_lieu_mau() {
@@ -216,9 +243,9 @@ void tao_du_lieu_mau() {
     danh_sach_thu_muc[1] = (ThuMuc){2, "Gia dung", 0.05};  
     so_thu_muc = 2;
 
-    danh_sach_hang[0] = (PhieuNhap){"mh102", "Dien thoai", "cai", {15, 10, 2026}, 150, 1000, 1, 0}; 
-    danh_sach_hang[1] = (PhieuNhap){"mh105", "Tai nghe", "hop", {15, 10, 2026}, 50, 200, 1, 0}; 
-    danh_sach_hang[2] = (PhieuNhap){"mh200", "Noi com dien", "cai", {16, 10, 2026}, 250, 500, 2, 0}; 
+    danh_sach_hang[0] = (PhieuNhap){"mh102", "Dien thoai", "cai", {15, 10, 2026}, 150, 1000, 1, 0, 0.01f}; 
+    danh_sach_hang[1] = (PhieuNhap){"mh105", "Tai nghe", "hop", {15, 10, 2026}, 50, 200, 1, 0, 0.005f}; 
+    danh_sach_hang[2] = (PhieuNhap){"mh200", "Noi com dien", "cai", {16, 10, 2026}, 250, 500, 2, 0, 0.3f}; 
     so_hang = 3;
 
     for (int i = 0; i < so_hang; i++) {
