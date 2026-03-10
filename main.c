@@ -13,6 +13,7 @@ int main() {
         printf("3. Quan ly thue thu muc (Xem, Sua, Xoa)\n");
         printf("4. Thong ke tat ca san pham\n");
         printf("5. Nhap san pham moi\n");
+        printf("6. Cap nhat dien tich kho chua\n");
         printf("0. Thoat chuong trinh\n");
         printf("====================================\n");
         printf("Chon chuc nang: ");
@@ -33,6 +34,9 @@ int main() {
                 break;
             case 5:
                 nhap_san_pham();
+                break;
+            case 6 :
+                nhap_dien_tich_kho_chua();
                 break;
             case 0:
                 printf("He thong da dong. Chuc ban mot ngay tot lanh!\n");

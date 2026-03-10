@@ -26,6 +26,7 @@ typedef struct {
 
     int thu_muc_id;
     float thanh_tien;
+    float dien_tich;
 } PhieuNhap;
 
 extern ThuMuc danh_sach_thu_muc[MAX_CATEGORIES];
@@ -33,5 +34,7 @@ extern int so_thu_muc;
 
 extern PhieuNhap danh_sach_hang[MAX_PRODUCTS];
 extern int so_hang;
+
+extern float dien_tich_kho;
 
 #endif
