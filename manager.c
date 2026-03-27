@@ -197,6 +197,22 @@ void quan_ly_thue() {
     }
 }
 
+void thong_ke_kho_hang(){
+    struct Node *p = danh_sach_hang;
+    printf("-----THONG KE MAT HANG -----\n");
+    while(p != NULL){
+        printf("Ma Hang: %s \n", p->value->ma_hang);
+        printf("Ten Hang: %s \n", p->value->ten_hang);
+        printf("Don Vi: %s \n", p->value->don_vi);
+        printf("Ngay / Thang / Nam : %d / %d / %d \n", p->value->ngay_nhap.ngay, p->value->ngay_nhap.thang, p->value->ngay_nhap.nam);
+        printf("So Luong: %d \n", p->value->so_luong);
+        printf("Don Gia: %f\n", p->value->don_gia);
+        p = p->next;
+
+        printf("\n\n");
+    }
+}
+
 void tao_du_lieu_mau() {
     ds_thu_muc[0] = (ThuMuc){1, "Cong nghe", 0.10}; 
     ds_thu_muc[1] = (ThuMuc){2, "Gia dung", 0.05};  

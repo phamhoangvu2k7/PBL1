@@ -12,6 +12,7 @@ int main() {
         printf("2. Thong ke tong tien theo ngay\n");
         printf("3. Xoa mat hang theo dieu kien\n");
         printf("4. Quan ly thue thu muc (Xem, Sua, Xoa)\n");
+        printf("5. Thong ke tat ca mat hang\n");
         printf("0. Thoat chuong trinh\n");
         printf("====================================\n");
         printf("Chon chuc nang: ");
@@ -29,6 +30,9 @@ int main() {
                 break;
             case 4:
                 quan_ly_thue();
+                break;
+            case 5:
+                thong_ke_kho_hang();
                 break;
             case 0:
                 printf("He thong da dong. Chuc ban mot ngay tot lanh!\n");
