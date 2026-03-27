@@ -87,8 +87,8 @@ void thong_ke_theo_ngay() {
 }
 
 void xoa_mat_hang() {
-    char input_don_vi[20];
-    char input_ma_hang[20];
+    char input_don_vi[40];
+    char input_ma_hang[40];
 
     printf("\n--- XOA MAT HANG ---\n");
     printf("Nhap don vi can xoa: ");
@@ -103,10 +103,12 @@ void xoa_mat_hang() {
     while (curNode != NULL) {
         PhieuNhap *p = curNode->value;
         
-        int n = string_len(p->don_vi, 20);
-        int m = string_len(input_don_vi, 20);
-        if (string_cmp(p->don_vi, input_don_vi, n, m) == 0 
-            && string_head_dup(p->ma_hang, input_ma_hang, n)) {
+        int n = string_len(p->don_vi, 40);
+        int m = string_len(input_don_vi, 40);
+        int len_ma_input = string_len(input_ma_hang, 40);
+
+        if (string_cmp(p->don_vi, input_don_vi, n, m)
+            && string_head_dup(p->ma_hang, input_ma_hang, len_ma_input)) {
             
             struct Node *temp = curNode; 
             
@@ -232,21 +234,21 @@ void nhap_hang(){
     phieu_nhap_new->value = (PhieuNhap*)malloc(sizeof(PhieuNhap));
 
     printf("Nhap Ma Hang: ");
-    scanf("%s", phieu_nhap_new->value->ma_hang);
+    scanf(" %s", phieu_nhap_new->value->ma_hang);
 
     printf("Nhap Ten Hang: ");
-    scanf("%s", phieu_nhap_new->value->ten_hang);
+    scanf(" %[^\n]", phieu_nhap_new->value->ten_hang);
 
     printf("Nhap So Luong: ");
-    scanf("%d", &phieu_nhap_new->value->so_luong);
+    scanf(" %d", &phieu_nhap_new->value->so_luong);
 
-    printf("Nhap Ngay Nhap : ngay - thang -nam: ");
+    printf("Nhap Ngay Nhap : ngay  thang  nam: ");
     NgayThang date;
     scanf("%d %d %d", &date.ngay, &date.thang, &date.nam);
     phieu_nhap_new->value->ngay_nhap = date;
 
     printf("Nhap Don Vi: ");
-    scanf("%s", phieu_nhap_new->value->don_vi);
+    scanf(" %[^\n]", phieu_nhap_new->value->don_vi);
 
     printf("Nhap Don Gia: ");
     scanf("%f", &phieu_nhap_new->value->don_gia);
