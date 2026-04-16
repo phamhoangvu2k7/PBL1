@@ -1,0 +1,7 @@
+mh600
+Loa bluetooth
+50
+15 10 2026
+cai
+800
+1

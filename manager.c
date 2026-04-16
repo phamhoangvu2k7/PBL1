@@ -104,14 +104,27 @@ void xoa_mat_hang() {
     return;
   }
 
+  char ten_file[100];
+  char duong_dan[200];
+  printf("\n--- XOA MAT HANG ---\n");
+  printf("Nhap ten file du lieu (trong data/xoa_hang/): ");
+  scanf(" %s", ten_file);
+
+  sprintf(duong_dan, "data/xoa_hang/%s", ten_file);
+  FILE *f = fopen(duong_dan, "r");
+  if (f == NULL) {
+    printf("Khong the mo file '%s'!\n", duong_dan);
+    return;
+  }
+
   char input_don_vi[40];
   char input_ma_hang[40];
 
-  printf("\n--- XOA MAT HANG ---\n");
-  printf("Nhap don vi can xoa: ");
-  scanf("%s", input_don_vi);
-  printf("Nhap ma hang can xoa: ");
-  scanf("%s", input_ma_hang);
+  fscanf(f, "%s", input_don_vi);
+  fscanf(f, "%s", input_ma_hang);
+  fclose(f);
+
+  printf("Doc tu file: don_vi='%s', ma_hang='%s'\n", input_don_vi, input_ma_hang);
 
   int so_luong_xoa = 0;
   Node *curNode = danh_sach_hang;
@@ -163,17 +176,27 @@ void xoa_mat_hang() {
 }
 
 void quan_ly_thue() {
+  char ten_file[100];
+  char duong_dan[200];
   int lua_chon, id;
   float thue_nhap;
 
   printf("\n--- QUAN LY THUE THU MUC ---\n");
-  printf("1. Xem danh sach thue\n");
-  printf("2. Sua thue\n");
-  printf("3. Xoa thue (Set ve 0%%)\n");
-  printf("Chon chuc nang: ");
-  scanf("%d", &lua_chon);
+  printf("Nhap ten file du lieu (trong data/quan_ly_thue/): ");
+  scanf(" %s", ten_file);
+
+  sprintf(duong_dan, "data/quan_ly_thue/%s", ten_file);
+  FILE *f = fopen(duong_dan, "r");
+  if (f == NULL) {
+    printf("Khong the mo file '%s'!\n", duong_dan);
+    return;
+  }
+
+  fscanf(f, "%d", &lua_chon);
+  printf("Doc tu file: lua_chon=%d\n", lua_chon);
 
   if (lua_chon == 1) {
+    fclose(f);
     printf("\n%-5s | %-20s | %-10s\n", "ID", "Ten Thu Muc", "Thue (%)");
     printf("-------------------------------------------\n");
     for (int i = 0; i < so_thu_muc; i++) {
@@ -182,16 +205,22 @@ void quan_ly_thue() {
     }
     printf("\n");
   } else if (lua_chon == 2 || lua_chon == 3) {
-    printf("Nhap ID thu muc can thao tac: ");
-    scanf("%d", &id);
+    fscanf(f, "%d", &id);
+    if (lua_chon == 2) {
+      fscanf(f, "%f", &thue_nhap);
+    }
+    fclose(f);
+
+    printf("Doc tu file: ID=%d\n", id);
+    if (lua_chon == 2) {
+      printf("Doc tu file: thue_moi=%.0f%%\n", thue_nhap);
+    }
 
     int tim_thay = 0;
     for (int i = 0; i < so_thu_muc; i++) {
       if (ds_thu_muc[i].id == id) {
         tim_thay = 1;
         if (lua_chon == 2) {
-          printf("Nhap muc thue moi (Vi du nhap 10 cho 10%%): ");
-          scanf("%f", &thue_nhap);
           ds_thu_muc[i].thue = thue_nhap / 100.0;
           printf("Da cap nhat thue thanh cong!\n");
         } else {
@@ -214,6 +243,9 @@ void quan_ly_thue() {
     if (!tim_thay) {
       printf("Khong tim thay ID thu muc nay!\n");
     }
+  } else {
+    fclose(f);
+    printf("Lua chon khong hop le trong file!\n");
   }
 }
 
@@ -293,41 +325,51 @@ void thong_ke_thu_muc() {
 }
 
 void nhap_hang() {
-  Node *phieu_nhap_new = (Node *)malloc(sizeof(Node));
-  phieu_nhap_new->value = (PhieuNhap *)malloc(sizeof(PhieuNhap));
+  char ten_file[100];
+  char duong_dan[200];
+  printf("Nhap ten file du lieu (trong data/nhap_hang/): ");
+  scanf(" %s", ten_file);
 
-  printf("Nhap Ma Hang: ");
-  scanf(" %s", phieu_nhap_new->value->ma_hang);
-
-  if (check_trung_maHang(phieu_nhap_new->value->ma_hang, danh_sach_hang)) {
-    printf("Ma hang tren da ton tai \n");
-
-    free(phieu_nhap_new->value);
-    free(phieu_nhap_new);
-
+  sprintf(duong_dan, "data/nhap_hang/%s", ten_file);
+  FILE *f = fopen(duong_dan, "r");
+  if (f == NULL) {
+    printf("Khong the mo file '%s'!\n", duong_dan);
     return;
   }
 
-  printf("Nhap Ten Hang: ");
-  scanf(" %[^\n]", phieu_nhap_new->value->ten_hang);
+  Node *phieu_nhap_new = (Node *)malloc(sizeof(Node));
+  phieu_nhap_new->value = (PhieuNhap *)malloc(sizeof(PhieuNhap));
 
-  printf("Nhap So Luong: ");
-  scanf(" %d", &phieu_nhap_new->value->so_luong);
+  fscanf(f, "%s", phieu_nhap_new->value->ma_hang);
 
-  printf("Nhap Ngay Thang Nam: ");
+  if (check_trung_maHang(phieu_nhap_new->value->ma_hang, danh_sach_hang)) {
+    printf("Ma hang '%s' da ton tai!\n", phieu_nhap_new->value->ma_hang);
+    free(phieu_nhap_new->value);
+    free(phieu_nhap_new);
+    fclose(f);
+    return;
+  }
+
+  fscanf(f, " %[^\n]", phieu_nhap_new->value->ten_hang);
+  fscanf(f, "%d", &phieu_nhap_new->value->so_luong);
+
   NgayThang date;
-  scanf("%d %d %d", &date.ngay, &date.thang, &date.nam);
+  fscanf(f, "%d %d %d", &date.ngay, &date.thang, &date.nam);
   phieu_nhap_new->value->ngay_nhap = date;
 
-  printf("Nhap Don Vi: ");
-  scanf(" %[^\n]", phieu_nhap_new->value->don_vi);
+  fscanf(f, " %[^\n]", phieu_nhap_new->value->don_vi);
+  fscanf(f, "%f", &phieu_nhap_new->value->don_gia);
+  fscanf(f, "%d", &phieu_nhap_new->value->thu_muc_id);
+  fclose(f);
 
-  printf("Nhap Don Gia: ");
-  scanf("%f", &phieu_nhap_new->value->don_gia);
-
-  thong_ke_thu_muc();
-  printf("Nhap ID Thu Muc: ");
-  scanf("%d", &phieu_nhap_new->value->thu_muc_id);
+  printf("Doc tu file: ma='%s', ten='%s', sl=%d, ngay=%d/%d/%d, dv='%s', gia=%.0f, tm_id=%d\n",
+         phieu_nhap_new->value->ma_hang,
+         phieu_nhap_new->value->ten_hang,
+         phieu_nhap_new->value->so_luong,
+         date.ngay, date.thang, date.nam,
+         phieu_nhap_new->value->don_vi,
+         phieu_nhap_new->value->don_gia,
+         phieu_nhap_new->value->thu_muc_id);
 
   tinh_thanh_tien(phieu_nhap_new->value);
 
@@ -341,4 +383,5 @@ void nhap_hang() {
   }
 
   so_hang++;
+  printf("Da nhap hang thanh cong! Thanh tien: %.2f\n", phieu_nhap_new->value->thanh_tien);
 }
