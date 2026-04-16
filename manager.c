@@ -47,6 +47,10 @@ void tinh_thanh_tien(PhieuNhap *phieu) {
 }
 
 void thong_ke_theo_ngay() {
+    if (so_hang == 0){
+        printf("khong co hang de thong ke");
+        return ;
+    }
     printf("\n--- THONG KE TONG TIEN THEO NGAY ---\n");
 
     int da_duyet[so_hang];
@@ -145,6 +149,10 @@ void xoa_mat_hang() {
         }
     }
 
+    if (danh_sach_hang == NULL) {
+        cuoi_danh_sach = NULL;
+    }
+
     printf("\n=> Da xoa %d mat hang co don vi '%s' va ma bat dau bang '%s'.\n", so_luong_xoa, input_don_vi, input_ma_hang);
 }
 
@@ -213,6 +221,7 @@ void thong_ke_kho_hang(){
         printf("Ngay / Thang / Nam : %d / %d / %d \n", p->value->ngay_nhap.ngay, p->value->ngay_nhap.thang, p->value->ngay_nhap.nam);
         printf("So Luong: %d \n", p->value->so_luong);
         printf("Don Gia: %0.3f\n", p->value->don_gia);
+        printf("Id thu muc: %d", p->value->thu_muc_id);
         p = p->next;
 
         printf("\n\n");
@@ -271,12 +280,32 @@ void thong_ke_thu_muc(){
     printf("\n");
 }
 
+int check_trung_maHang(char maHang[]){
+    Node *cur = danh_sach_hang;
+    
+    while(cur != NULL){
+        int n = string_len(cur->value->ma_hang, 40);
+        int m = string_len(maHang, 40);
+
+        if(string_cmp(cur->value->ma_hang, maHang, n, m)){
+            return 1;
+        }
+        cur = cur->next;
+    }
+    return 0;
+}
 void nhap_hang(){
      Node *phieu_nhap_new = ( Node*)malloc(sizeof( Node));
     phieu_nhap_new->value = (PhieuNhap*)malloc(sizeof(PhieuNhap));
 
     printf("Nhap Ma Hang: ");
     scanf(" %s", phieu_nhap_new->value->ma_hang);
+
+    if(check_trung_maHang(phieu_nhap_new->value->ma_hang)){
+        printf ("Ma hang tren da ton tai \n");
+        return;
+
+    }
 
     printf("Nhap Ten Hang: ");
     scanf(" %[^\n]", phieu_nhap_new->value->ten_hang);
