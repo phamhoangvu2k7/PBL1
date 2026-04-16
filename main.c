@@ -22,7 +22,7 @@ do {
 
         while (getchar() != '\n');
 
-        continue; // ✅ QUAY LẠI MENU
+        continue; 
     }
 
     switch (chuc_nang) {

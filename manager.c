@@ -280,20 +280,7 @@ void thong_ke_thu_muc(){
     printf("\n");
 }
 
-int check_trung_maHang(char maHang[]){
-    Node *cur = danh_sach_hang;
-    
-    while(cur != NULL){
-        int n = string_len(cur->value->ma_hang, 40);
-        int m = string_len(maHang, 40);
 
-        if(string_cmp(cur->value->ma_hang, maHang, n, m)){
-            return 1;
-        }
-        cur = cur->next;
-    }
-    return 0;
-}
 void nhap_hang(){
      Node *phieu_nhap_new = ( Node*)malloc(sizeof( Node));
     phieu_nhap_new->value = (PhieuNhap*)malloc(sizeof(PhieuNhap));
@@ -301,10 +288,13 @@ void nhap_hang(){
     printf("Nhap Ma Hang: ");
     scanf(" %s", phieu_nhap_new->value->ma_hang);
 
-    if(check_trung_maHang(phieu_nhap_new->value->ma_hang)){
-        printf ("Ma hang tren da ton tai \n");
-        return;
+    if(check_trung_maHang(phieu_nhap_new->value->ma_hang, danh_sach_hang)){
+        printf("Ma hang tren da ton tai \n");
 
+        free(phieu_nhap_new->value);
+        free(phieu_nhap_new);
+
+        return;
     }
 
     printf("Nhap Ten Hang: ");
