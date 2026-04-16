@@ -1,10 +1,10 @@
 #ifndef COMMON_H
 #define COMMON_H
 
-#define MAX_PRODUCTS 100
-#define MAX_CATEGORIES 20
+#define MAX_CATEGORIES 50
+
 #include <stdlib.h>
-#include <string.h>
+
 typedef struct {
     int ngay;
     int thang;
@@ -30,11 +30,11 @@ typedef struct {
 } PhieuNhap;
 
 
-struct Node{
+typedef struct Node{
     PhieuNhap* value;
     struct Node* next;
 
-};
+} Node;
 
 
 

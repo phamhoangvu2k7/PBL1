@@ -10,13 +10,16 @@ int string_cmp(char a[], char b[], int n, int m){
     return 1;
 }
 
-int string_head_dup(char a[], char b[], int n){
-    int i;
-    for(i = 0; i < n; i++){
-        if(b[i] != a[i]){
+int string_head_dup(char a[], char b[]) {
+    int i = 0;
+
+    while (a[i] != '\0') {
+        if (b[i] == '\0' || a[i] != b[i]) {
             return 0;
         }
+        i++;
     }
+
     return 1;
 }
 
@@ -28,3 +31,13 @@ int string_len(char a[], int max_size){
     return n;
 }
 
+int string_copy(char a[], char b[]){
+    int i = 0;
+    while(b[i] != '\0'){
+        a[i] = b[i];
+        i ++;
+    }
+    a[i] = '\0';
+
+    return 0;
+}
