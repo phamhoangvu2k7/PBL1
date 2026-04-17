@@ -110,7 +110,7 @@ void xoa_mat_hang() {
   printf("Nhap ten file du lieu (trong data/xoa_hang/): ");
   scanf(" %s", ten_file);
 
-  sprintf(duong_dan, "data/xoa_hang/%s", ten_file);
+  sprintf(duong_dan, "data/xoa_hang/%s.txt", ten_file);
   FILE *f = fopen(duong_dan, "r");
   if (f == NULL) {
     printf("Khong the mo file '%s'!\n", duong_dan);
@@ -185,7 +185,7 @@ void quan_ly_thue() {
   printf("Nhap ten file du lieu (trong data/quan_ly_thue/): ");
   scanf(" %s", ten_file);
 
-  sprintf(duong_dan, "data/quan_ly_thue/%s", ten_file);
+  sprintf(duong_dan, "data/quan_ly_thue/%s.txt", ten_file);
   FILE *f = fopen(duong_dan, "r");
   if (f == NULL) {
     printf("Khong the mo file '%s'!\n", duong_dan);
@@ -330,7 +330,7 @@ void nhap_hang() {
   printf("Nhap ten file du lieu (trong data/nhap_hang/): ");
   scanf(" %s", ten_file);
 
-  sprintf(duong_dan, "data/nhap_hang/%s", ten_file);
+  sprintf(duong_dan, "data/nhap_hang/%s.txt", ten_file);
   FILE *f = fopen(duong_dan, "r");
   if (f == NULL) {
     printf("Khong the mo file '%s'!\n", duong_dan);
