@@ -13,6 +13,7 @@ do {
     printf("3. Xoa mat hang theo dieu kien\n");
     printf("4. Quan ly thue thu muc (Xem, Sua, Xoa)\n");
     printf("5. Thong ke tat ca mat hang\n");
+    printf("6. Tim kiem mat hang theo ma\n");
     printf("0. Thoat chuong trinh\n");
     printf("====================================\n");
     printf("Chon chuc nang: ");
@@ -41,11 +42,14 @@ do {
         case 5:
             thong_ke_kho_hang();
             break;
+        case 6:
+            tim_kiem_theo_ma_hang();
+            break;
         case 0:
             printf("He thong da dong.\n");
             break;
         default: 
-            printf("Lua chon khong hop le! Vui long chon tu 0 den 5.\n");
+            printf("Lua chon khong hop le! Vui long chon tu 0 den 6.\n");
     }
 
 } while (chuc_nang != 0);

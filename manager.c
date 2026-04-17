@@ -385,3 +385,34 @@ void nhap_hang() {
   so_hang++;
   printf("Da nhap hang thanh cong! Thanh tien: %.2f\n", phieu_nhap_new->value->thanh_tien);
 }
+
+void tim_kiem_theo_ma_hang() {
+  char ma_hang_tim[40];
+  printf("\n--- TIM KIEM MAT HANG THEO MA ---\n");
+  printf("Nhap ma hang can tim: ");
+  scanf(" %s", ma_hang_tim);
+
+  Node *p = danh_sach_hang;
+  int tim_thay = 0;
+  while (p != NULL) {
+    if (string_cmp(p->value->ma_hang, ma_hang_tim, string_len(p->value->ma_hang, 40), string_len(ma_hang_tim, 40))) {
+      printf("\nDa tim thay mat hang:\n");
+      printf("Ma Hang: %s \n", p->value->ma_hang);
+      printf("Ten Hang: %s \n", p->value->ten_hang);
+      printf("Don Vi: %s \n", p->value->don_vi);
+      printf("Ngay / Thang / Nam : %d / %d / %d \n", p->value->ngay_nhap.ngay,
+             p->value->ngay_nhap.thang, p->value->ngay_nhap.nam);
+      printf("So Luong: %d \n", p->value->so_luong);
+      printf("Don Gia: %0.3f\n", p->value->don_gia);
+      printf("Id thu muc: %d\n", p->value->thu_muc_id);
+      printf("Thanh tien: %0.2f\n", p->value->thanh_tien);
+      tim_thay = 1;
+      break; 
+    }
+    p = p->next;
+  }
+  
+  if (!tim_thay) {
+    printf("\nKhong tim thay mat hang nao boi ma '%s'.\n", ma_hang_tim);
+  }
+}
