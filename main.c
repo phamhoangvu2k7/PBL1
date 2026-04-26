@@ -1,12 +1,13 @@
+#include "manager.h"
 #include <stdio.h>
-#include "manager.h" 
+
 
 int main() {
-    tao_du_lieu_mau();
-    
-    int chuc_nang;
+  tao_du_lieu_mau();
 
-do {
+  int chuc_nang;
+
+  do {
     printf("\n====== HE THONG QUAN LY KHO ======\n");
     printf("1. Tao phieu nhap kho \n");
     printf("2. Thong ke tong tien theo ngay\n");
@@ -19,40 +20,41 @@ do {
     printf("Chon chuc nang: ");
 
     if (scanf("%d", &chuc_nang) != 1) {
-        printf("Nhap sai! Vui long nhap so.\n");
+      printf("Nhap sai! Vui long nhap so.\n");
 
-        while (getchar() != '\n');
+      while (getchar() != '\n')
+        ;
 
-        continue; 
+      continue;
     }
 
     switch (chuc_nang) {
-        case 1:
-            nhap_hang();
-            break;
-        case 2:
-            thong_ke_theo_ngay();
-            break; 
-        case 3:
-            xoa_mat_hang();
-            break;
-        case 4:
-            quan_ly_thue();
-            break;
-        case 5:
-            thong_ke_kho_hang();
-            break;
-        case 6:
-            tim_kiem_theo_ma_hang();
-            break;
-        case 0:
-            printf("He thong da dong.\n");
-            break;
-        default: 
-            printf("Lua chon khong hop le! Vui long chon tu 0 den 6.\n");
+    case 1:
+      nhap_hang();
+      break;
+    case 2:
+      thong_ke_theo_ngay();
+      break;
+    case 3:
+      xoa_mat_hang();
+      break;
+    case 4:
+      quan_ly_thue();
+      break;
+    case 5:
+      thong_ke_kho_hang();
+      break;
+    case 6:
+      tim_kiem_theo_ma_hang();
+      break;
+    case 0:
+      printf("He thong da dong.\n");
+      break;
+    default:
+      printf("Lua chon khong hop le! Vui long chon tu 0 den 6.\n");
     }
 
-} while (chuc_nang != 0);
+  } while (chuc_nang != 0);
 
-    return 0; 
+  return 0;
 }

@@ -58,6 +58,9 @@ void thong_ke_theo_ngay() {
     return;
   }
   printf("\n--- THONG KE TONG TIEN THEO NGAY ---\n");
+  printf("+------------+----------------------+\n");
+  printf("| %-10s | %-20s |\n", "Ngay", "Tong Tien");
+  printf("+------------+----------------------+\n");
 
   int da_duyet[so_hang];
   for (int i = 0; i < so_hang; i++) {
@@ -91,10 +94,11 @@ void thong_ke_theo_ngay() {
     i++;
     curNodei = curNodei->next;
 
-    printf("-----DATE: %d - %d - %d: ---- ", ngay_dang_xet.ngay,
-           ngay_dang_xet.thang, ngay_dang_xet.nam);
-    printf("Tong Tien:  %0.2f \n", tong_tien_ngay);
+    char ngay_str[20];
+    sprintf(ngay_str, "%02d/%02d/%04d", ngay_dang_xet.ngay, ngay_dang_xet.thang, ngay_dang_xet.nam);
+    printf("| %-10s | %20.2f |\n", ngay_str, tong_tien_ngay);
   }
+  printf("+------------+----------------------+\n");
 }
 
 void xoa_mat_hang() {
@@ -197,13 +201,14 @@ void quan_ly_thue() {
 
   if (lua_chon == 1) {
     fclose(f);
-    printf("\n%-5s | %-20s | %-10s\n", "ID", "Ten Thu Muc", "Thue (%)");
-    printf("-------------------------------------------\n");
+    printf("\n+------+----------------------+------------+\n");
+    printf("| %-4s | %-20s | %-10s |\n", "ID", "Ten Thu Muc", "Thue (%)");
+    printf("+------+----------------------+------------+\n");
     for (int i = 0; i < so_thu_muc; i++) {
-      printf("%-5d | %-20s | %.2f%%\n", ds_thu_muc[i].id,
+      printf("| %-4d | %-20s | %9.2f%% |\n", ds_thu_muc[i].id,
              ds_thu_muc[i].ten_thu_muc, ds_thu_muc[i].thue * 100);
     }
-    printf("\n");
+    printf("+------+----------------------+------------+\n\n");
   } else if (lua_chon == 2 || lua_chon == 3) {
     fscanf(f, "%d", &id);
     if (lua_chon == 2) {
@@ -251,20 +256,20 @@ void quan_ly_thue() {
 
 void thong_ke_kho_hang() {
   Node *p = danh_sach_hang;
-  printf("-----THONG KE MAT HANG -----\n\n");
+  printf("\n----- THONG KE KHO HANG -----\n");
+  printf("+----------+--------------------------+------------+------------+----------+--------------+------------+-----------------+\n");
+  printf("| %-8s | %-24s | %-10s | %-10s | %-8s | %-12s | %-10s | %-15s |\n", 
+         "Ma Hang", "Ten Hang", "Don Vi", "Ngay Nhap", "So Luong", "Don Gia", "ID Thu Muc", "Thanh Tien");
+  printf("+----------+--------------------------+------------+------------+----------+--------------+------------+-----------------+\n");
   while (p != NULL) {
-    printf("Ma Hang: %s \n", p->value->ma_hang);
-    printf("Ten Hang: %s \n", p->value->ten_hang);
-    printf("Don Vi: %s \n", p->value->don_vi);
-    printf("Ngay / Thang / Nam : %d / %d / %d \n", p->value->ngay_nhap.ngay,
-           p->value->ngay_nhap.thang, p->value->ngay_nhap.nam);
-    printf("So Luong: %d \n", p->value->so_luong);
-    printf("Don Gia: %0.3f\n", p->value->don_gia);
-    printf("Id thu muc: %d", p->value->thu_muc_id);
+    char ngay_nhap[20];
+    sprintf(ngay_nhap, "%02d/%02d/%04d", p->value->ngay_nhap.ngay, p->value->ngay_nhap.thang, p->value->ngay_nhap.nam);
+    printf("| %-8s | %-24s | %-10s | %-10s | %8d | %12.3f | %10d | %15.2f |\n", 
+           p->value->ma_hang, p->value->ten_hang, p->value->don_vi, ngay_nhap, 
+           p->value->so_luong, p->value->don_gia, p->value->thu_muc_id, p->value->thanh_tien);
     p = p->next;
-
-    printf("\n\n");
   }
+  printf("+----------+--------------------------+------------+------------+----------+--------------+------------+-----------------+\n");
 }
 
 void tao_du_lieu_mau() {
@@ -314,14 +319,15 @@ void tao_du_lieu_mau() {
 }
 
 void thong_ke_thu_muc() {
-  printf("-----THONG KE THU MUC -----\n\n");
-  printf("\n%-5s | %-20s | %-10s\n", "ID", "Ten Thu Muc", "Thue (%)");
-  printf("-------------------------------------------\n");
+  printf("\n----- THONG KE THU MUC -----\n");
+  printf("+------+----------------------+------------+\n");
+  printf("| %-4s | %-20s | %-10s |\n", "ID", "Ten Thu Muc", "Thue (%)");
+  printf("+------+----------------------+------------+\n");
   for (int i = 0; i < so_thu_muc; i++) {
-    printf("%-5d | %-20s | %.2f%%\n", ds_thu_muc[i].id,
+    printf("| %-4d | %-20s | %9.2f%% |\n", ds_thu_muc[i].id,
            ds_thu_muc[i].ten_thu_muc, ds_thu_muc[i].thue * 100);
   }
-  printf("\n");
+  printf("+------+----------------------+------------+\n\n");
 }
 
 void nhap_hang() {
@@ -397,15 +403,16 @@ void tim_kiem_theo_ma_hang() {
   while (p != NULL) {
     if (string_cmp(p->value->ma_hang, ma_hang_tim, string_len(p->value->ma_hang, 40), string_len(ma_hang_tim, 40))) {
       printf("\nDa tim thay mat hang:\n");
-      printf("Ma Hang: %s \n", p->value->ma_hang);
-      printf("Ten Hang: %s \n", p->value->ten_hang);
-      printf("Don Vi: %s \n", p->value->don_vi);
-      printf("Ngay / Thang / Nam : %d / %d / %d \n", p->value->ngay_nhap.ngay,
-             p->value->ngay_nhap.thang, p->value->ngay_nhap.nam);
-      printf("So Luong: %d \n", p->value->so_luong);
-      printf("Don Gia: %0.3f\n", p->value->don_gia);
-      printf("Id thu muc: %d\n", p->value->thu_muc_id);
-      printf("Thanh tien: %0.2f\n", p->value->thanh_tien);
+      printf("+----------+--------------------------+------------+------------+----------+--------------+------------+-----------------+\n");
+      printf("| %-8s | %-24s | %-10s | %-10s | %-8s | %-12s | %-10s | %-15s |\n", 
+             "Ma Hang", "Ten Hang", "Don Vi", "Ngay Nhap", "So Luong", "Don Gia", "ID Thu Muc", "Thanh Tien");
+      printf("+----------+--------------------------+------------+------------+----------+--------------+------------+-----------------+\n");
+      char ngay_nhap[20];
+      sprintf(ngay_nhap, "%02d/%02d/%04d", p->value->ngay_nhap.ngay, p->value->ngay_nhap.thang, p->value->ngay_nhap.nam);
+      printf("| %-8s | %-24s | %-10s | %-10s | %8d | %12.3f | %10d | %15.2f |\n", 
+             p->value->ma_hang, p->value->ten_hang, p->value->don_vi, ngay_nhap, 
+             p->value->so_luong, p->value->don_gia, p->value->thu_muc_id, p->value->thanh_tien);
+      printf("+----------+--------------------------+------------+------------+----------+--------------+------------+-----------------+\n");
       tim_thay = 1;
       break; 
     }
