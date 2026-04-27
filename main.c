@@ -2,22 +2,25 @@
 #include <stdio.h>
 
 int main() {
+  hien_thi_thong_tin_du_an();
   tao_du_lieu_mau();
 
   int chuc_nang;
 
   do {
-    printf("\n====== HE THONG QUAN LY KHO ======\n");
-    printf("1. Tao phieu nhap kho \n");
-    printf("2. Thong ke tong tien theo ngay\n");
-    printf("3. Xoa mat hang theo dieu kien\n");
-    printf("4. Quan ly thue thu muc (Xem, Sua, Xoa)\n");
-    printf("5. Hien thi tat ca mat hang\n");
-    printf("6. Tim kiem mat hang theo ma\n");
-    printf("7. Sap xep danh sach mat hang\n");
-    printf("0. Thoat chuong trinh\n");
-    printf("====================================\n");
-    printf("Chon chuc nang: ");
+    printf("\n" BOLD BLUE "==============================================" RESET "\n");
+    printf(BOLD CYAN "         HE THONG QUAN LY KHO HANG" RESET "\n");
+    printf(BOLD BLUE "==============================================" RESET "\n");
+    printf(YELLOW " 1." RESET " Tao phieu nhap kho\n");
+    printf(YELLOW " 2." RESET " Thong ke tong tien theo ngay\n");
+    printf(YELLOW " 3." RESET " Xoa mat hang theo dieu kien\n");
+    printf(YELLOW " 4." RESET " Quan ly thue thu muc (Xem, Sua, Xoa)\n");
+    printf(YELLOW " 5." RESET " Hien thi tat ca mat hang\n");
+    printf(YELLOW " 6." RESET " Tim kiem mat hang theo ma\n");
+    printf(YELLOW " 7." RESET " Sap xep danh sach mat hang\n");
+    printf(RED " 0." RESET " Thoat chuong trinh\n");
+    printf(BOLD BLUE "----------------------------------------------" RESET "\n");
+    printf(BOLD "Chon chuc nang: " RESET);
 
     if (scanf("%d", &chuc_nang) != 1) {
       printf("Nhap sai! Vui long nhap so.\n");

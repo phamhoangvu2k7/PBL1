@@ -129,8 +129,8 @@ void xoa_mat_hang() {
   fscanf(f, "%s", input_ma_hang);
   fclose(f);
 
-  printf("Doc tu file: don_vi='%s', ma_hang='%s'\n", input_don_vi,
-         input_ma_hang);
+  printf(CYAN ">> Don vi  : " RESET "%s\n", input_don_vi);
+  printf(CYAN ">> Ma hang : " RESET "%s\n", input_ma_hang);
 
   int so_luong_xoa = 0;
   Node *curNode = danh_sach_hang;
@@ -199,18 +199,18 @@ void quan_ly_thue() {
   }
 
   fscanf(f, "%d", &lua_chon);
-  printf("Doc tu file: lua_chon=%d\n", lua_chon);
 
   if (lua_chon == 1) {
     fclose(f);
-    printf("\n+------+----------------------+------------+\n");
-    printf("| %-4s | %-20s | %-10s |\n", "ID", "Ten Thu Muc", "Thue (%)");
-    printf("+------+----------------------+------------+\n");
+    printf("\n" BOLD CYAN "+------+----------------------+------------+" RESET "\n");
+    printf(CYAN "|" RESET BOLD " %-4s " RESET CYAN "|" RESET BOLD " %-20s " RESET CYAN "|" RESET BOLD " %-10s " RESET CYAN "|" RESET "\n", 
+           "ID", "Ten Thu Muc", "Thue (%)");
+    printf(CYAN "+------+----------------------+------------+" RESET "\n");
     for (int i = 0; i < so_thu_muc; i++) {
-      printf("| %-4d | %-20s | %9.2f%% |\n", ds_thu_muc[i].id,
-             ds_thu_muc[i].ten_thu_muc, ds_thu_muc[i].thue * 100);
+      printf(CYAN "|" RESET " %-4d " CYAN "|" RESET " %-20s " CYAN "|" RESET " %9.2f%% " CYAN "|" RESET "\n", 
+             ds_thu_muc[i].id, ds_thu_muc[i].ten_thu_muc, ds_thu_muc[i].thue * 100);
     }
-    printf("+------+----------------------+------------+\n\n");
+    printf(CYAN "+------+----------------------+------------+" RESET "\n\n");
   } else if (lua_chon == 2 || lua_chon == 3) {
     fscanf(f, "%d", &id);
     if (lua_chon == 2) {
@@ -218,9 +218,9 @@ void quan_ly_thue() {
     }
     fclose(f);
 
-    printf("Doc tu file: ID=%d\n", id);
+    printf(CYAN ">> ID thu muc: " RESET "%d\n", id);
     if (lua_chon == 2) {
-      printf("Doc tu file: thue_moi=%.0f%%\n", thue_nhap);
+      printf(CYAN ">> Thue moi  : " RESET "%.0f%%\n", thue_nhap);
     }
 
     int tim_thay = 0;
@@ -258,26 +258,37 @@ void quan_ly_thue() {
 
 void thong_ke_kho_hang() {
   Node *p = danh_sach_hang;
-  printf("\n----- THONG KE KHO HANG -----\n");
-  printf("+----------+--------------------------+------------+------------+----"
-         "------+--------------+------------+-----------------+\n");
-  printf("| %-8s | %-24s | %-10s | %-10s | %-8s | %-12s | %-10s | %-15s |\n",
+  printf("\n" BOLD YELLOW "----- THONG KE KHO HANG -----" RESET "\n");
+  printf(CYAN "+----------+--------------------------+------------+------------"
+              "+----------+--------------+------------+-----------------+" RESET
+              "\n");
+  printf(CYAN
+         "|" RESET BOLD " %-8s " RESET CYAN "|" RESET BOLD " %-24s " RESET CYAN
+         "|" RESET BOLD " %-10s " RESET CYAN "|" RESET BOLD " %-10s " RESET CYAN
+         "|" RESET BOLD " %-8s " RESET CYAN "|" RESET BOLD " %-12s " RESET CYAN
+         "|" RESET BOLD " %-10s " RESET CYAN "|" RESET BOLD " %-15s " RESET CYAN
+         "|" RESET "\n",
          "Ma Hang", "Ten Hang", "Don Vi", "Ngay Nhap", "So Luong", "Don Gia",
          "ID Thu Muc", "Thanh Tien");
-  printf("+----------+--------------------------+------------+------------+----"
-         "------+--------------+------------+-----------------+\n");
+  printf(CYAN "+----------+--------------------------+------------+------------"
+              "+----------+--------------+------------+-----------------+" RESET
+              "\n");
   while (p != NULL) {
     char ngay_nhap[20];
     sprintf(ngay_nhap, "%02d/%02d/%04d", p->value->ngay_nhap.ngay,
             p->value->ngay_nhap.thang, p->value->ngay_nhap.nam);
-    printf("| %-8s | %-24s | %-10s | %-10s | %8d | %12.3f | %10d | %15.2f |\n",
+    printf(CYAN "|" RESET " %-8s " CYAN "|" RESET " %-24s " CYAN "|" RESET
+                " %-10s " CYAN "|" RESET " %-10s " CYAN "|" RESET " %8d " CYAN
+                "|" RESET " %12.3f " CYAN "|" RESET " %10d " CYAN "|" RESET
+                " %15.2f " CYAN "|" RESET "\n",
            p->value->ma_hang, p->value->ten_hang, p->value->don_vi, ngay_nhap,
            p->value->so_luong, p->value->don_gia, p->value->thu_muc_id,
            p->value->thanh_tien);
     p = p->next;
   }
-  printf("+----------+--------------------------+------------+------------+----"
-         "------+--------------+------------+-----------------+\n");
+  printf(CYAN "+----------+--------------------------+------------+------------"
+              "+----------+--------------+------------+-----------------+" RESET
+              "\n");
 }
 
 void tao_du_lieu_mau() {
@@ -290,7 +301,7 @@ void tao_du_lieu_mau() {
   ds_thu_muc[4] = (ThuMuc){5, "Thuc pham", 0.02};
   ds_thu_muc[5] = (ThuMuc){6, "Suc khoe", 0.12};
 
-  ds_thu_muc[6] = (ThuMuc){7, "Sach & Van phong pham", 0.05};
+  ds_thu_muc[6] = (ThuMuc){7, "Noi that", 0.05};
   ds_thu_muc[7] = (ThuMuc){8, "Do choi", 0.10};
 
   ds_thu_muc[8] = (ThuMuc){9, "Lam dep", 0.20};
@@ -327,15 +338,16 @@ void tao_du_lieu_mau() {
 }
 
 void thong_ke_thu_muc() {
-  printf("\n----- THONG KE THU MUC -----\n");
-  printf("+------+----------------------+------------+\n");
-  printf("| %-4s | %-20s | %-10s |\n", "ID", "Ten Thu Muc", "Thue (%)");
-  printf("+------+----------------------+------------+\n");
+  printf("\n" BOLD YELLOW "----- THONG KE THU MUC -----" RESET "\n");
+  printf(CYAN "+------+----------------------+------------+" RESET "\n");
+  printf(CYAN "|" RESET BOLD " %-4s " RESET CYAN "|" RESET BOLD " %-20s " RESET CYAN "|" RESET BOLD " %-10s " RESET CYAN "|" RESET "\n", 
+         "ID", "Ten Thu Muc", "Thue (%)");
+  printf(CYAN "+------+----------------------+------------+" RESET "\n");
   for (int i = 0; i < so_thu_muc; i++) {
-    printf("| %-4d | %-20s | %9.2f%% |\n", ds_thu_muc[i].id,
-           ds_thu_muc[i].ten_thu_muc, ds_thu_muc[i].thue * 100);
+    printf(CYAN "|" RESET " %-4d " CYAN "|" RESET " %-20s " CYAN "|" RESET " %9.2f%% " CYAN "|" RESET "\n", 
+           ds_thu_muc[i].id, ds_thu_muc[i].ten_thu_muc, ds_thu_muc[i].thue * 100);
   }
-  printf("+------+----------------------+------------+\n\n");
+  printf(CYAN "+------+----------------------+------------+" RESET "\n\n");
 }
 
 void nhap_hang() {
@@ -376,12 +388,13 @@ void nhap_hang() {
   fscanf(f, "%d", &phieu_nhap_new->value->thu_muc_id);
   fclose(f);
 
-  printf("Doc tu file: ma='%s', ten='%s', sl=%d, ngay=%d/%d/%d, dv='%s', "
-         "gia=%.0f, tm_id=%d\n",
-         phieu_nhap_new->value->ma_hang, phieu_nhap_new->value->ten_hang,
-         phieu_nhap_new->value->so_luong, date.ngay, date.thang, date.nam,
-         phieu_nhap_new->value->don_vi, phieu_nhap_new->value->don_gia,
-         phieu_nhap_new->value->thu_muc_id);
+  printf(CYAN ">> Ma hang   : " RESET "%s\n", phieu_nhap_new->value->ma_hang);
+  printf(CYAN ">> Ten hang  : " RESET "%s\n", phieu_nhap_new->value->ten_hang);
+  printf(CYAN ">> So luong  : " RESET "%d\n", phieu_nhap_new->value->so_luong);
+  printf(CYAN ">> Ngay nhap : " RESET "%02d/%02d/%04d\n", date.ngay, date.thang, date.nam);
+  printf(CYAN ">> Don vi    : " RESET "%s\n", phieu_nhap_new->value->don_vi);
+  printf(CYAN ">> Don gia   : " RESET "%.0f\n", phieu_nhap_new->value->don_gia);
+  printf(CYAN ">> ID Thu muc: " RESET "%d\n", phieu_nhap_new->value->thu_muc_id);
 
   tinh_thanh_tien(phieu_nhap_new->value);
 
@@ -395,7 +408,7 @@ void nhap_hang() {
   }
 
   so_hang++;
-  printf("Da nhap hang thanh cong! Thanh tien: %.2f\n",
+  printf(GREEN "Da nhap hang thanh cong! Thanh tien: %.2f" RESET "\n",
          phieu_nhap_new->value->thanh_tien);
 }
 
@@ -450,11 +463,11 @@ void sap_xep_danh_sach() {
   }
 
   int lua_chon;
-  printf("\n--- SAP XEP DANH SACH ---\n");
-  printf("1. Sap xep theo thanh tien\n");
-  printf("2. Sap xep theo ngay thang nhap\n");
-  printf("3. Sap xep theo thu tu chu cai cua ma hang\n");
-  printf("Chon loai sap xep: ");
+  printf("\n" BOLD CYAN "--- SAP XEP DANH SACH ---" RESET "\n");
+  printf(YELLOW "1." RESET " Sap xep theo thanh tien\n");
+  printf(YELLOW "2." RESET " Sap xep theo ngay thang nhap\n");
+  printf(YELLOW "3." RESET " Sap xep theo thu tu chu cai cua ma hang\n");
+  printf(BOLD "Chon loai sap xep: " RESET);
   scanf("%d", &lua_chon);
 
   Node *i, *j;
@@ -483,3 +496,21 @@ void sap_xep_danh_sach() {
   printf("\nDa sap xep xong!\n");
   thong_ke_kho_hang();
 }
+
+// clang-format off
+void hien_thi_thong_tin_du_an() {
+  const int width = 75;
+  printf(BLUE "+---------------------------------------------------------------------------+" RESET "\n");
+  printf(BLUE "|" RESET "%*s" BOLD CYAN "%s" RESET "%*s" BLUE "|" RESET "\n", 16, "", "TRUONG DAI HOC BACH KHOA - DAI HOC DA NANG", 17, "");
+  printf(BLUE "|" RESET "%*s" BOLD "%s" RESET "%*s" BLUE "|" RESET "\n", 25, "", "KHOA CONG NGHE THONG TIN", 26, "");
+  printf(BLUE "|" RESET "%*s" BOLD "%s" RESET "%*s" BLUE "|" RESET "\n", 32, "", "DU AN PBL 1", 32, "");
+  printf(BLUE "|" RESET "%*s" BLUE "|" RESET "\n", width, "");
+  printf(BLUE "|" RESET "%*s" BLUE "|" RESET "\n", width, "");
+  printf(BLUE "|" RESET "%*s" YELLOW BOLD "!!!   QUAN LY HANG NHAP TRONG 1 THANG   !!!" RESET "%*s" BLUE "|" RESET "\n", 16, "", 16, "");
+  printf(BLUE "|" RESET "%*s" BLUE "|" RESET "\n", width, "");
+  printf(BLUE "|" RESET "    " CYAN "** NHOM 7 **" RESET "%*s" BLUE "|" RESET "\n", 59, "");
+  printf(BLUE "|" RESET "            1. " BOLD "PHAM HOANG VU" RESET " - 25T_DT1%*s" BLUE "|" RESET "\n", 37, "");
+  printf(BLUE "|" RESET "            2. " BOLD "LE MINH DANH" RESET "  - 25T_DT4%*s" BLUE "|" RESET "\n", 37, "");
+  printf(BLUE "+---------------------------------------------------------------------------+" RESET "\n");
+}
+// clang-format on

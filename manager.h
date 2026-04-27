@@ -10,6 +10,7 @@ void quan_ly_thue();
 void thong_ke_kho_hang();
 void tim_kiem_theo_ma_hang();
 void sap_xep_danh_sach();
+void hien_thi_thong_tin_du_an();
 
 void createNode(char ma_hang[], char ten_hang[], char don_vi[], NgayThang ngay_nhap, int so_luong, float don_gia, int thu_muc_id, float thanh_tien, struct Node* newNode);
 void nhap_hang();
