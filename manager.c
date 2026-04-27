@@ -95,7 +95,8 @@ void thong_ke_theo_ngay() {
     curNodei = curNodei->next;
 
     char ngay_str[20];
-    sprintf(ngay_str, "%02d/%02d/%04d", ngay_dang_xet.ngay, ngay_dang_xet.thang, ngay_dang_xet.nam);
+    sprintf(ngay_str, "%02d/%02d/%04d", ngay_dang_xet.ngay, ngay_dang_xet.thang,
+            ngay_dang_xet.nam);
     printf("| %-10s | %20.2f |\n", ngay_str, tong_tien_ngay);
   }
   printf("+------------+----------------------+\n");
@@ -128,7 +129,8 @@ void xoa_mat_hang() {
   fscanf(f, "%s", input_ma_hang);
   fclose(f);
 
-  printf("Doc tu file: don_vi='%s', ma_hang='%s'\n", input_don_vi, input_ma_hang);
+  printf("Doc tu file: don_vi='%s', ma_hang='%s'\n", input_don_vi,
+         input_ma_hang);
 
   int so_luong_xoa = 0;
   Node *curNode = danh_sach_hang;
@@ -257,19 +259,25 @@ void quan_ly_thue() {
 void thong_ke_kho_hang() {
   Node *p = danh_sach_hang;
   printf("\n----- THONG KE KHO HANG -----\n");
-  printf("+----------+--------------------------+------------+------------+----------+--------------+------------+-----------------+\n");
-  printf("| %-8s | %-24s | %-10s | %-10s | %-8s | %-12s | %-10s | %-15s |\n", 
-         "Ma Hang", "Ten Hang", "Don Vi", "Ngay Nhap", "So Luong", "Don Gia", "ID Thu Muc", "Thanh Tien");
-  printf("+----------+--------------------------+------------+------------+----------+--------------+------------+-----------------+\n");
+  printf("+----------+--------------------------+------------+------------+----"
+         "------+--------------+------------+-----------------+\n");
+  printf("| %-8s | %-24s | %-10s | %-10s | %-8s | %-12s | %-10s | %-15s |\n",
+         "Ma Hang", "Ten Hang", "Don Vi", "Ngay Nhap", "So Luong", "Don Gia",
+         "ID Thu Muc", "Thanh Tien");
+  printf("+----------+--------------------------+------------+------------+----"
+         "------+--------------+------------+-----------------+\n");
   while (p != NULL) {
     char ngay_nhap[20];
-    sprintf(ngay_nhap, "%02d/%02d/%04d", p->value->ngay_nhap.ngay, p->value->ngay_nhap.thang, p->value->ngay_nhap.nam);
-    printf("| %-8s | %-24s | %-10s | %-10s | %8d | %12.3f | %10d | %15.2f |\n", 
-           p->value->ma_hang, p->value->ten_hang, p->value->don_vi, ngay_nhap, 
-           p->value->so_luong, p->value->don_gia, p->value->thu_muc_id, p->value->thanh_tien);
+    sprintf(ngay_nhap, "%02d/%02d/%04d", p->value->ngay_nhap.ngay,
+            p->value->ngay_nhap.thang, p->value->ngay_nhap.nam);
+    printf("| %-8s | %-24s | %-10s | %-10s | %8d | %12.3f | %10d | %15.2f |\n",
+           p->value->ma_hang, p->value->ten_hang, p->value->don_vi, ngay_nhap,
+           p->value->so_luong, p->value->don_gia, p->value->thu_muc_id,
+           p->value->thanh_tien);
     p = p->next;
   }
-  printf("+----------+--------------------------+------------+------------+----------+--------------+------------+-----------------+\n");
+  printf("+----------+--------------------------+------------+------------+----"
+         "------+--------------+------------+-----------------+\n");
 }
 
 void tao_du_lieu_mau() {
@@ -368,13 +376,11 @@ void nhap_hang() {
   fscanf(f, "%d", &phieu_nhap_new->value->thu_muc_id);
   fclose(f);
 
-  printf("Doc tu file: ma='%s', ten='%s', sl=%d, ngay=%d/%d/%d, dv='%s', gia=%.0f, tm_id=%d\n",
-         phieu_nhap_new->value->ma_hang,
-         phieu_nhap_new->value->ten_hang,
-         phieu_nhap_new->value->so_luong,
-         date.ngay, date.thang, date.nam,
-         phieu_nhap_new->value->don_vi,
-         phieu_nhap_new->value->don_gia,
+  printf("Doc tu file: ma='%s', ten='%s', sl=%d, ngay=%d/%d/%d, dv='%s', "
+         "gia=%.0f, tm_id=%d\n",
+         phieu_nhap_new->value->ma_hang, phieu_nhap_new->value->ten_hang,
+         phieu_nhap_new->value->so_luong, date.ngay, date.thang, date.nam,
+         phieu_nhap_new->value->don_vi, phieu_nhap_new->value->don_gia,
          phieu_nhap_new->value->thu_muc_id);
 
   tinh_thanh_tien(phieu_nhap_new->value);
@@ -389,7 +395,8 @@ void nhap_hang() {
   }
 
   so_hang++;
-  printf("Da nhap hang thanh cong! Thanh tien: %.2f\n", phieu_nhap_new->value->thanh_tien);
+  printf("Da nhap hang thanh cong! Thanh tien: %.2f\n",
+         phieu_nhap_new->value->thanh_tien);
 }
 
 void tim_kiem_theo_ma_hang() {
@@ -401,25 +408,78 @@ void tim_kiem_theo_ma_hang() {
   Node *p = danh_sach_hang;
   int tim_thay = 0;
   while (p != NULL) {
-    if (string_cmp(p->value->ma_hang, ma_hang_tim, string_len(p->value->ma_hang, 40), string_len(ma_hang_tim, 40))) {
+    if (string_cmp(p->value->ma_hang, ma_hang_tim,
+                   string_len(p->value->ma_hang, 40),
+                   string_len(ma_hang_tim, 40))) {
       printf("\nDa tim thay mat hang:\n");
-      printf("+----------+--------------------------+------------+------------+----------+--------------+------------+-----------------+\n");
-      printf("| %-8s | %-24s | %-10s | %-10s | %-8s | %-12s | %-10s | %-15s |\n", 
-             "Ma Hang", "Ten Hang", "Don Vi", "Ngay Nhap", "So Luong", "Don Gia", "ID Thu Muc", "Thanh Tien");
-      printf("+----------+--------------------------+------------+------------+----------+--------------+------------+-----------------+\n");
+      printf("+----------+--------------------------+------------+------------+"
+             "----------+--------------+------------+-----------------+\n");
+      printf(
+          "| %-8s | %-24s | %-10s | %-10s | %-8s | %-12s | %-10s | %-15s |\n",
+          "Ma Hang", "Ten Hang", "Don Vi", "Ngay Nhap", "So Luong", "Don Gia",
+          "ID Thu Muc", "Thanh Tien");
+      printf("+----------+--------------------------+------------+------------+"
+             "----------+--------------+------------+-----------------+\n");
       char ngay_nhap[20];
-      sprintf(ngay_nhap, "%02d/%02d/%04d", p->value->ngay_nhap.ngay, p->value->ngay_nhap.thang, p->value->ngay_nhap.nam);
-      printf("| %-8s | %-24s | %-10s | %-10s | %8d | %12.3f | %10d | %15.2f |\n", 
-             p->value->ma_hang, p->value->ten_hang, p->value->don_vi, ngay_nhap, 
-             p->value->so_luong, p->value->don_gia, p->value->thu_muc_id, p->value->thanh_tien);
-      printf("+----------+--------------------------+------------+------------+----------+--------------+------------+-----------------+\n");
+      sprintf(ngay_nhap, "%02d/%02d/%04d", p->value->ngay_nhap.ngay,
+              p->value->ngay_nhap.thang, p->value->ngay_nhap.nam);
+      printf(
+          "| %-8s | %-24s | %-10s | %-10s | %8d | %12.3f | %10d | %15.2f |\n",
+          p->value->ma_hang, p->value->ten_hang, p->value->don_vi, ngay_nhap,
+          p->value->so_luong, p->value->don_gia, p->value->thu_muc_id,
+          p->value->thanh_tien);
+      printf("+----------+--------------------------+------------+------------+"
+             "----------+--------------+------------+-----------------+\n");
       tim_thay = 1;
-      break; 
+      break;
     }
     p = p->next;
   }
-  
+
   if (!tim_thay) {
     printf("\nKhong tim thay mat hang nao boi ma '%s'.\n", ma_hang_tim);
   }
+}
+
+void sap_xep_danh_sach() {
+  if (danh_sach_hang == NULL || danh_sach_hang->next == NULL) {
+    printf("\nDanh sach rong hoac chi co 1 mat hang, khong can sap xep.\n");
+    if (danh_sach_hang != NULL)
+      thong_ke_kho_hang();
+    return;
+  }
+
+  int lua_chon;
+  printf("\n--- SAP XEP DANH SACH ---\n");
+  printf("1. Sap xep theo thanh tien\n");
+  printf("2. Sap xep theo ngay thang nhap\n");
+  printf("3. Sap xep theo thu tu chu cai cua ma hang\n");
+  printf("Chon loai sap xep: ");
+  scanf("%d", &lua_chon);
+
+  Node *i, *j;
+  for (i = danh_sach_hang; i->next != NULL; i = i->next) {
+    for (j = i->next; j != NULL; j = j->next) {
+      int should_swap = 0;
+      if (lua_chon == 1) {
+        if (i->value->thanh_tien > j->value->thanh_tien)
+          should_swap = 1;
+      } else if (lua_chon == 2) {
+        if (so_sanh_ngay(i->value->ngay_nhap, j->value->ngay_nhap) > 0)
+          should_swap = 1;
+      } else if (lua_chon == 3) {
+        if (so_sanh_chu_cai(i->value->ma_hang, j->value->ma_hang) > 0)
+          should_swap = 1;
+      }
+
+      if (should_swap) {
+        PhieuNhap *temp = i->value;
+        i->value = j->value;
+        j->value = temp;
+      }
+    }
+  }
+
+  printf("\nDa sap xep xong!\n");
+  thong_ke_kho_hang();
 }

@@ -1,7 +1,6 @@
 #include "manager.h"
 #include <stdio.h>
 
-
 int main() {
   tao_du_lieu_mau();
 
@@ -13,8 +12,9 @@ int main() {
     printf("2. Thong ke tong tien theo ngay\n");
     printf("3. Xoa mat hang theo dieu kien\n");
     printf("4. Quan ly thue thu muc (Xem, Sua, Xoa)\n");
-    printf("5. Thong ke tat ca mat hang\n");
+    printf("5. Hien thi tat ca mat hang\n");
     printf("6. Tim kiem mat hang theo ma\n");
+    printf("7. Sap xep danh sach mat hang\n");
     printf("0. Thoat chuong trinh\n");
     printf("====================================\n");
     printf("Chon chuc nang: ");
@@ -46,6 +46,9 @@ int main() {
       break;
     case 6:
       tim_kiem_theo_ma_hang();
+      break;
+    case 7:
+      sap_xep_danh_sach();
       break;
     case 0:
       printf("He thong da dong.\n");

@@ -10,6 +10,24 @@ int cung_ngay(NgayThang product1, NgayThang product2){
     return 0;
 }
 
+int so_sanh_ngay(NgayThang n1, NgayThang n2) {
+    if (n1.nam != n2.nam) return n1.nam - n2.nam;
+    if (n1.thang != n2.thang) return n1.thang - n2.thang;
+    return n1.ngay - n2.ngay;
+}
+
+int so_sanh_chu_cai(char a[], char b[]) {
+    int i = 0;
+    while (a[i] != '\0' && b[i] != '\0') {
+        if (a[i] < b[i]) return -1;
+        if (a[i] > b[i]) return 1;
+        i++;
+    }
+    if (a[i] == '\0' && b[i] == '\0') return 0;
+    if (a[i] == '\0') return -1;
+    return 1;
+}
+
 int check_trung_maHang(char maHang[], Node* danh_sach_hang){
     Node *cur = danh_sach_hang;
     
