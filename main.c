@@ -12,7 +12,7 @@ int main() {
     printf(BOLD CYAN "         HE THONG QUAN LY KHO HANG" RESET "\n");
     printf(BOLD BLUE "==============================================" RESET "\n");
     printf(YELLOW " 1." RESET " Tao phieu nhap kho\n");
-    printf(YELLOW " 2." RESET " Thong ke tong tien theo ngay\n");
+    printf(YELLOW " 2." RESET " Thong ke tong tien\n");
     printf(YELLOW " 3." RESET " Xoa mat hang theo dieu kien\n");
     printf(YELLOW " 4." RESET " Quan ly thue thu muc (Xem, Sua, Xoa)\n");
     printf(YELLOW " 5." RESET " Hien thi tat ca mat hang\n");
@@ -36,7 +36,7 @@ int main() {
       nhap_hang();
       break;
     case 2:
-      thong_ke_theo_ngay();
+      thong_ke_tong_tien();
       break;
     case 3:
       xoa_mat_hang();

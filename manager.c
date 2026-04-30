@@ -102,6 +102,84 @@ void thong_ke_theo_ngay() {
   printf("+------------+----------------------+\n");
 }
 
+void thong_ke_theo_thang() {
+  if (so_hang == 0) {
+    printf("khong co hang de thong ke");
+    return;
+  }
+  printf("\n--- THONG KE TONG TIEN THEO THANG ---\n");
+  printf("+---------+----------------------+\n");
+  printf("| %-7s | %-20s |\n", "Thang", "Tong Tien");
+  printf("+---------+----------------------+\n");
+
+  int da_duyet[so_hang];
+  for (int i = 0; i < so_hang; i++) {
+    da_duyet[i] = 0;
+  }
+
+  int i = 0;
+  Node *curNodei = danh_sach_hang;
+  while (i < so_hang) {
+    if (da_duyet[i]) {
+      i++;
+      curNodei = curNodei->next;
+      continue;
+    }
+
+    NgayThang thang_dang_xet = curNodei->value->ngay_nhap;
+    float tong_tien_thang = 0;
+
+    int j = i;
+    Node *curNodej = curNodei;
+
+    while (j < so_hang) {
+      if (cung_thang(curNodei->value->ngay_nhap, curNodej->value->ngay_nhap)) {
+        tong_tien_thang += curNodej->value->thanh_tien;
+        da_duyet[j] = 1;
+      }
+      j++;
+
+      curNodej = curNodej->next;
+    }
+    i++;
+    curNodei = curNodei->next;
+
+    char thang_str[20];
+    sprintf(thang_str, "%02d/%04d", thang_dang_xet.thang, thang_dang_xet.nam);
+    printf("| %-7s | %20.2f |\n", thang_str, tong_tien_thang);
+  }
+  printf("+---------+----------------------+\n");
+}
+
+void thong_ke_tong_tien() {
+  int lua_chon;
+  do {
+    printf("\n" BOLD CYAN "--- THONG KE TONG TIEN ---" RESET "\n");
+    printf(YELLOW "1." RESET " Thong ke theo ngay\n");
+    printf(YELLOW "2." RESET " Thong ke theo thang\n");
+    printf(RED "0." RESET " Quay lai\n");
+    printf(BOLD "Chon loai thong ke: " RESET);
+    if (scanf("%d", &lua_chon) != 1) {
+      printf("Nhap sai! Vui long nhap so.\n");
+      while (getchar() != '\n');
+      continue;
+    }
+
+    switch (lua_chon) {
+      case 1:
+        thong_ke_theo_ngay();
+        break;
+      case 2:
+        thong_ke_theo_thang();
+        break;
+      case 0:
+        break;
+      default:
+        printf("Lua chon khong hop le!\n");
+    }
+  } while (lua_chon != 0);
+}
+
 void xoa_mat_hang() {
 
   if (so_hang == 0) {

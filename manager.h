@@ -5,6 +5,8 @@
 
 void tinh_thanh_tien(PhieuNhap *phieu);
 void thong_ke_theo_ngay();
+void thong_ke_theo_thang();
+void thong_ke_tong_tien();
 void xoa_mat_hang();
 void quan_ly_thue();
 void thong_ke_kho_hang();
