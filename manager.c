@@ -553,7 +553,16 @@ void sap_xep_danh_sach() {
   printf(YELLOW "2." RESET " Sap xep theo ngay thang nhap\n");
   printf(YELLOW "3." RESET " Sap xep theo thu tu chu cai cua ma hang\n");
   printf(BOLD "Chon loai sap xep: " RESET);
-  scanf("%d", &lua_chon);
+  if (scanf("%d", &lua_chon) != 1) {
+    printf(RED "Nhap sai! Vui long nhap so." RESET "\n");
+    while (getchar() != '\n');
+    return;
+  }
+
+  if (lua_chon < 1 || lua_chon > 3) {
+    printf(RED "Lua chon khong hop le!" RESET "\n");
+    return;
+  }
 
   Node *i, *j;
   for (i = danh_sach_hang; i->next != NULL; i = i->next) {
