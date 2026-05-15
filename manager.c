@@ -338,34 +338,38 @@ void thong_ke_kho_hang() {
   Node *p = danh_sach_hang;
   printf("\n" BOLD YELLOW "----- THONG KE KHO HANG -----" RESET "\n");
   printf(CYAN "+----------+--------------------------+------------+------------"
-              "+----------+--------------+------------+-----------------+" RESET
+              "+----------+--------------+------------+------------+-----------------+-----------------+" RESET
               "\n");
   printf(CYAN
          "|" RESET BOLD " %-8s " RESET CYAN "|" RESET BOLD " %-24s " RESET CYAN
          "|" RESET BOLD " %-10s " RESET CYAN "|" RESET BOLD " %-10s " RESET CYAN
          "|" RESET BOLD " %-8s " RESET CYAN "|" RESET BOLD " %-12s " RESET CYAN
-         "|" RESET BOLD " %-10s " RESET CYAN "|" RESET BOLD " %-15s " RESET CYAN
+         "|" RESET BOLD " %-10s " RESET CYAN "|" RESET BOLD " %-10s " RESET CYAN
+         "|" RESET BOLD " %-15s " RESET CYAN "|" RESET BOLD " %-15s " RESET CYAN
          "|" RESET "\n",
          "Ma Hang", "Ten Hang", "Don Vi", "Ngay Nhap", "So Luong", "Don Gia",
-         "ID Thu Muc", "Thanh Tien");
+         "ID Thu Muc", "Thue (%)", "Tien Thue", "Thanh Tien");
   printf(CYAN "+----------+--------------------------+------------+------------"
-              "+----------+--------------+------------+-----------------+" RESET
+              "+----------+--------------+------------+------------+-----------------+-----------------+" RESET
               "\n");
   while (p != NULL) {
     char ngay_nhap[20];
     sprintf(ngay_nhap, "%02d/%02d/%04d", p->value->ngay_nhap.ngay,
             p->value->ngay_nhap.thang, p->value->ngay_nhap.nam);
+    float thue_ap_dung = thue_thu_muc(p->value->thu_muc_id);
+    float tien_thue = (p->value->thanh_tien / (1.0 + thue_ap_dung)) * thue_ap_dung;
+
     printf(CYAN "|" RESET " %-8s " CYAN "|" RESET " %-24s " CYAN "|" RESET
                 " %-10s " CYAN "|" RESET " %-10s " CYAN "|" RESET " %8d " CYAN
-                "|" RESET " %12.3f " CYAN "|" RESET " %10d " CYAN "|" RESET
-                " %15.2f " CYAN "|" RESET "\n",
+                "|" RESET " %12.3f " CYAN "|" RESET " %10d " CYAN "|" RESET " %9.2f%% " CYAN "|" RESET
+                " %15.2f " CYAN "|" RESET " %15.2f " CYAN "|" RESET "\n",
            p->value->ma_hang, p->value->ten_hang, p->value->don_vi, ngay_nhap,
            p->value->so_luong, p->value->don_gia, p->value->thu_muc_id,
-           p->value->thanh_tien);
+           thue_ap_dung * 100, tien_thue, p->value->thanh_tien);
     p = p->next;
   }
   printf(CYAN "+----------+--------------------------+------------+------------"
-              "+----------+--------------+------------+-----------------+" RESET
+              "+----------+--------------+------------+------------+-----------------+-----------------+" RESET
               "\n");
 }
 
@@ -504,23 +508,26 @@ void tim_kiem_theo_ma_hang() {
                    string_len(ma_hang_tim, 40))) {
       printf("\nDa tim thay mat hang:\n");
       printf("+----------+--------------------------+------------+------------+"
-             "----------+--------------+------------+-----------------+\n");
+             "----------+--------------+------------+------------+-----------------+-----------------+\n");
       printf(
-          "| %-8s | %-24s | %-10s | %-10s | %-8s | %-12s | %-10s | %-15s |\n",
+          "| %-8s | %-24s | %-10s | %-10s | %-8s | %-12s | %-10s | %-10s | %-15s | %-15s |\n",
           "Ma Hang", "Ten Hang", "Don Vi", "Ngay Nhap", "So Luong", "Don Gia",
-          "ID Thu Muc", "Thanh Tien");
+          "ID Thu Muc", "Thue (%)", "Tien Thue", "Thanh Tien");
       printf("+----------+--------------------------+------------+------------+"
-             "----------+--------------+------------+-----------------+\n");
+             "----------+--------------+------------+------------+-----------------+-----------------+\n");
       char ngay_nhap[20];
       sprintf(ngay_nhap, "%02d/%02d/%04d", p->value->ngay_nhap.ngay,
               p->value->ngay_nhap.thang, p->value->ngay_nhap.nam);
+      float thue_ap_dung = thue_thu_muc(p->value->thu_muc_id);
+      float tien_thue = (p->value->thanh_tien / (1.0 + thue_ap_dung)) * thue_ap_dung;
+
       printf(
-          "| %-8s | %-24s | %-10s | %-10s | %8d | %12.3f | %10d | %15.2f |\n",
+          "| %-8s | %-24s | %-10s | %-10s | %8d | %12.3f | %10d | %9.2f%% | %15.2f | %15.2f |\n",
           p->value->ma_hang, p->value->ten_hang, p->value->don_vi, ngay_nhap,
           p->value->so_luong, p->value->don_gia, p->value->thu_muc_id,
-          p->value->thanh_tien);
+          thue_ap_dung * 100, tien_thue, p->value->thanh_tien);
       printf("+----------+--------------------------+------------+------------+"
-             "----------+--------------+------------+-----------------+\n");
+             "----------+--------------+------------+------------+-----------------+-----------------+\n");
       tim_thay = 1;
       break;
     }
@@ -586,6 +593,7 @@ void hien_thi_thong_tin_du_an() {
   printf(BLUE "|" RESET "%*s" BLUE "|" RESET "\n", width, "");
   printf(BLUE "|" RESET "%*s" YELLOW BOLD "!!!   QUAN LY HANG NHAP TRONG 1 THANG   !!!" RESET "%*s" BLUE "|" RESET "\n", 16, "", 16, "");
   printf(BLUE "|" RESET "%*s" BLUE "|" RESET "\n", width, "");
+  printf(BLUE "|" RESET "    " YELLOW BOLD "Giao vien huong dan : " RESET BOLD "Do Thi Tuyet Hoa" RESET "%*s" BLUE "|" RESET "\n", 33, "");
   printf(BLUE "|" RESET "    " CYAN "** NHOM 7 **" RESET "%*s" BLUE "|" RESET "\n", 59, "");
   printf(BLUE "|" RESET "            1. " BOLD "PHAM HOANG VU" RESET " - 25T_DT1%*s" BLUE "|" RESET "\n", 37, "");
   printf(BLUE "|" RESET "            2. " BOLD "LE MINH DANH" RESET "  - 25T_DT4%*s" BLUE "|" RESET "\n", 37, "");
