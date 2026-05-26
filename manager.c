@@ -262,24 +262,22 @@ void xoa_mat_hang() {
 void quan_ly_thue() {
   char ten_file[100];
   char duong_dan[200];
-  int lua_chon, id;
+  int lua_chon_menu, id;
   float thue_nhap;
 
   printf("\n--- QUAN LY THUE THU MUC ---\n");
-  printf("Nhap ten file du lieu (trong data/quan_ly_thue/): ");
-  scanf(" %s", ten_file);
-
-  sprintf(duong_dan, "data/quan_ly_thue/%s.txt", ten_file);
-  FILE *f = fopen(duong_dan, "r");
-  if (f == NULL) {
-    printf("Khong the mo file '%s'!\n", duong_dan);
+  printf("1. Sua thue\n");
+  printf("2. Xem thue\n");
+  printf("3. Xoa thue\n");
+  printf("Chon chuc nang (1-3): ");
+  if (scanf("%d", &lua_chon_menu) != 1) {
+    printf("Nhap sai! Vui long nhap so.\n");
+    while (getchar() != '\n');
     return;
   }
 
-  fscanf(f, "%d", &lua_chon);
-
-  if (lua_chon == 1) {
-    fclose(f);
+  // xem thue
+  if (lua_chon_menu == 2) {
     printf("\n" BOLD CYAN "+------+----------------------+------------+" RESET "\n");
     printf(CYAN "|" RESET BOLD " %-4s " RESET CYAN "|" RESET BOLD " %-20s " RESET CYAN "|" RESET BOLD " %-10s " RESET CYAN "|" RESET "\n", 
            "ID", "Ten Thu Muc", "Thue (%)");
@@ -289,23 +287,59 @@ void quan_ly_thue() {
              ds_thu_muc[i].id, ds_thu_muc[i].ten_thu_muc, ds_thu_muc[i].thue * 100);
     }
     printf(CYAN "+------+----------------------+------------+" RESET "\n\n");
-  } else if (lua_chon == 2 || lua_chon == 3) {
-    fscanf(f, "%d", &id);
-    if (lua_chon == 2) {
-      fscanf(f, "%f", &thue_nhap);
+    return;
+  } 
+  
+  // sua thue/ xoa thue
+  else if (lua_chon_menu == 1 || lua_chon_menu == 3) {
+    printf("Nhap ten file du lieu (trong data/quan_ly_thue/): ");
+    scanf(" %s", ten_file);
+
+    sprintf(duong_dan, "data/quan_ly_thue/%s.txt", ten_file);
+    FILE *f = fopen(duong_dan, "r");
+    if (f == NULL) {
+      printf("Khong the mo file '%s'!\n", duong_dan);
+      return;
+    }
+
+    //sua thue phai co 2 input int
+    if (lua_chon_menu == 1) { 
+      // Bắt buộc đọc được đúng 2 số
+      if (fscanf(f, "%d %f", &id, &thue_nhap) != 2) {
+        printf("File khong dung dinh dang! (Yeu cau 2 so: ID va Thue moi)\n");
+        fclose(f);
+        return;
+      }
+    } else if (lua_chon_menu == 3) { 
+      // bat buoc chi co 1 so
+      float kiem_tra_du;
+      int so_luong_doc_duoc = fscanf(f, "%d %f", &id, &kiem_tra_du);
+      
+      if (so_luong_doc_duoc > 1) {
+        printf("File khong dung dinh dang! (Chuc nang xoa chi nhan file chua duy nhat 1 so ID)\n");
+        fclose(f);
+        return;
+      } else if (so_luong_doc_duoc != 1) {
+        printf("File khong dung dinh dang hoac file rong! (Yeu cau 1 so: ID)\n");
+        fclose(f);
+        return;
+      }
     }
     fclose(f);
 
+    // In thông tin đã đọc
     printf(CYAN ">> ID thu muc: " RESET "%d\n", id);
-    if (lua_chon == 2) {
+    if (lua_chon_menu == 1) {
       printf(CYAN ">> Thue moi  : " RESET "%.0f%%\n", thue_nhap);
     }
 
+    // Xử lý logic Cập nhật/Xóa
     int tim_thay = 0;
     for (int i = 0; i < so_thu_muc; i++) {
       if (ds_thu_muc[i].id == id) {
         tim_thay = 1;
-        if (lua_chon == 2) {
+        
+        if (lua_chon_menu == 1) {
           ds_thu_muc[i].thue = thue_nhap / 100.0;
           printf("Da cap nhat thue thanh cong!\n");
         } else {
@@ -328,9 +362,9 @@ void quan_ly_thue() {
     if (!tim_thay) {
       printf("Khong tim thay ID thu muc nay!\n");
     }
+
   } else {
-    fclose(f);
-    printf("Lua chon khong hop le trong file!\n");
+    printf("Lua chon khong hop le!\n");
   }
 }
 
