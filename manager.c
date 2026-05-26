@@ -450,49 +450,91 @@ void thong_ke_kho_hang() {
 }
 
 void tao_du_lieu_mau() {
-  ds_thu_muc[0] = (ThuMuc){1, "Cong nghe", 0.10};
-  ds_thu_muc[1] = (ThuMuc){2, "Gia dung", 0.05};
+  so_thu_muc = 0;
+  danh_sach_hang = NULL;
+  cuoi_danh_sach = NULL;
+  so_hang = 0;
 
-  ds_thu_muc[2] = (ThuMuc){3, "Thoi trang", 0.15};
-  ds_thu_muc[3] = (ThuMuc){4, "Phu kien", 0.08};
+  // 1. Doc danh sach thu muc
+  FILE *f1 = fopen("data/data_mau/ds_thu_muc.txt", "r");
+  if (f1 == NULL) {
+    printf("Khong the mo file data/data_mau/ds_thu_muc.txt de nap du lieu mau!\n");
+    return;
+  }
+  int count_thu_muc = 0;
+  if (fscanf(f1, "%d", &count_thu_muc) == 1) {
+    for (int i = 0; i < count_thu_muc && i < MAX_CATEGORIES; i++) {
+      if (fscanf(f1, "%d", &ds_thu_muc[i].id) != 1) break;
+      if (fscanf(f1, " %[^\n]", ds_thu_muc[i].ten_thu_muc) != 1) break;
+      if (fscanf(f1, "%f", &ds_thu_muc[i].thue) != 1) break;
+      so_thu_muc++;
+    }
+  }
+  fclose(f1);
 
-  ds_thu_muc[4] = (ThuMuc){5, "Thuc pham", 0.02};
-  ds_thu_muc[5] = (ThuMuc){6, "Suc khoe", 0.12};
-
-  ds_thu_muc[6] = (ThuMuc){7, "Noi that", 0.05};
-  ds_thu_muc[7] = (ThuMuc){8, "Do choi", 0.10};
-
-  ds_thu_muc[8] = (ThuMuc){9, "Lam dep", 0.20};
-  ds_thu_muc[9] = (ThuMuc){10, "The thao", 0.07};
-  so_thu_muc = 10;
-
-  Node *newNode1 = (Node *)malloc(sizeof(Node));
-  createNode("mh102", "Dien thoai", "cai", (NgayThang){15, 10, 2026}, 150, 1000,
-             1, 0, newNode1);
-  tinh_thanh_tien(newNode1->value);
-  danh_sach_hang = newNode1;
-
-  Node *newNode2 = (Node *)malloc(sizeof(Node));
-  createNode("mh105", "Tai nghe", "hop", (NgayThang){15, 10, 2026}, 50, 200, 1,
-             0, newNode2);
-  tinh_thanh_tien(newNode2->value);
-  newNode1->next = newNode2;
-
-  Node *newNode3 = (Node *)malloc(sizeof(Node));
-  createNode("mh200", "Noi com dien", "cai", (NgayThang){16, 10, 2026}, 250,
-             500, 2, 0, newNode3);
-  tinh_thanh_tien(newNode3->value);
-  newNode2->next = newNode3;
-
-  Node *newNode4 = (Node *)malloc(sizeof(Node));
-  createNode("mh300", "Binh nong lanh", "cai", (NgayThang){16, 10, 2026}, 300,
-             300, 2, 0, newNode4);
-  tinh_thanh_tien(newNode4->value);
-  newNode3->next = newNode4;
-
-  cuoi_danh_sach = newNode4;
-  so_hang = 4;
-  newNode4->next = NULL;
+  // 2. Doc danh sach hang hoa
+  FILE *f2 = fopen("data/data_mau/ds_hang.txt", "r");
+  if (f2 == NULL) {
+    printf("Khong the mo file data/data_mau/ds_hang.txt de nap du lieu mau!\n");
+    return;
+  }
+  int count_hang = 0;
+  if (fscanf(f2, "%d", &count_hang) == 1) {
+    for (int i = 0; i < count_hang; i++) {
+      Node *newNode = (Node *)malloc(sizeof(Node));
+      newNode->value = (PhieuNhap *)malloc(sizeof(PhieuNhap));
+      
+      if (fscanf(f2, "%s", newNode->value->ma_hang) != 1) {
+        free(newNode->value);
+        free(newNode);
+        break;
+      }
+      if (fscanf(f2, " %[^\n]", newNode->value->ten_hang) != 1) {
+        free(newNode->value);
+        free(newNode);
+        break;
+      }
+      if (fscanf(f2, "%d", &newNode->value->so_luong) != 1) {
+        free(newNode->value);
+        free(newNode);
+        break;
+      }
+      if (fscanf(f2, "%d %d %d", &newNode->value->ngay_nhap.ngay,
+                                 &newNode->value->ngay_nhap.thang,
+                                 &newNode->value->ngay_nhap.nam) != 3) {
+        free(newNode->value);
+        free(newNode);
+        break;
+      }
+      if (fscanf(f2, " %[^\n]", newNode->value->don_vi) != 1) {
+        free(newNode->value);
+        free(newNode);
+        break;
+      }
+      if (fscanf(f2, "%f", &newNode->value->don_gia) != 1) {
+        free(newNode->value);
+        free(newNode);
+        break;
+      }
+      if (fscanf(f2, "%d", &newNode->value->thu_muc_id) != 1) {
+        free(newNode->value);
+        free(newNode);
+        break;
+      }
+      
+      tinh_thanh_tien(newNode->value);
+      newNode->next = NULL;
+      
+      if (danh_sach_hang == NULL) {
+        danh_sach_hang = cuoi_danh_sach = newNode;
+      } else {
+        cuoi_danh_sach->next = newNode;
+        cuoi_danh_sach = newNode;
+      }
+      so_hang++;
+    }
+  }
+  fclose(f2);
 }
 
 void thong_ke_thu_muc() {
