@@ -14,7 +14,7 @@ int main() {
     printf(YELLOW " 1." RESET " Tao phieu nhap kho\n");
     printf(YELLOW " 2." RESET " Thong ke tong tien\n");
     printf(YELLOW " 3." RESET " Xoa mat hang theo dieu kien\n");
-    printf(YELLOW " 4." RESET " Quan ly thue thu muc (Xem, Sua, Xoa)\n");
+    printf(YELLOW " 4." RESET " Quan ly thue thu muc (Xem, Sua, Xoa, Them)\n");
     printf(YELLOW " 5." RESET " Hien thi tat ca mat hang\n");
     printf(YELLOW " 6." RESET " Tim kiem mat hang theo ma\n");
     printf(YELLOW " 7." RESET " Sap xep danh sach mat hang\n");
