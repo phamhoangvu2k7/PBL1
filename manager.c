@@ -266,15 +266,20 @@ void quan_ly_thue() {
   float thue_nhap;
   char ten_thu_muc_nhap[50];
 
-  printf("\n--- QUAN LY THUE THU MUC ---\n");
-  printf("1. Sua thue\n");
-  printf("2. Xem thue\n");
-  printf("3. Xoa thue\n");
-  printf("4. Them thu muc moi\n");
-  printf("Chon chuc nang (1-4): ");
+  printf("\n" BOLD CYAN "--- QUAN LY THUE THU MUC ---" RESET "\n");
+  printf(YELLOW "1." RESET " Sua thue\n");
+  printf(YELLOW "2." RESET " Xem thue\n");
+  printf(YELLOW "3." RESET " Xoa thue\n");
+  printf(YELLOW "4." RESET " Them thu muc moi\n");
+  printf(RED "0." RESET " Quay lai\n");
+  printf(BOLD "Chon chuc nang (0-4): " RESET);
   if (scanf("%d", &lua_chon_menu) != 1) {
     printf("Nhap sai! Vui long nhap so.\n");
     while (getchar() != '\n');
+    return;
+  }
+
+  if (lua_chon_menu == 0) {
     return;
   }
 
@@ -670,10 +675,15 @@ void sap_xep_danh_sach() {
   printf(YELLOW "1." RESET " Sap xep theo thanh tien\n");
   printf(YELLOW "2." RESET " Sap xep theo ngay thang nhap\n");
   printf(YELLOW "3." RESET " Sap xep theo thu tu chu cai cua ma hang\n");
-  printf(BOLD "Chon loai sap xep: " RESET);
+  printf(RED "0." RESET " Quay lai\n");
+  printf(BOLD "Chon loai sap xep (0-3): " RESET);
   if (scanf("%d", &lua_chon) != 1) {
     printf(RED "Nhap sai! Vui long nhap so." RESET "\n");
     while (getchar() != '\n');
+    return;
+  }
+
+  if (lua_chon == 0) {
     return;
   }
 
