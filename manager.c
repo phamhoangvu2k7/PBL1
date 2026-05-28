@@ -154,6 +154,7 @@ void thong_ke_theo_thang() {
 void thong_ke_tong_tien() {
   int lua_chon;
   do {
+    system("cls");
     printf("\n" BOLD CYAN "--- THONG KE TONG TIEN ---" RESET "\n");
     printf(YELLOW "1." RESET " Thong ke theo ngay\n");
     printf(YELLOW "2." RESET " Thong ke theo thang\n");
@@ -162,20 +163,28 @@ void thong_ke_tong_tien() {
     if (scanf("%d", &lua_chon) != 1) {
       printf("Nhap sai! Vui long nhap so.\n");
       while (getchar() != '\n');
+      printf("\n" BOLD GREEN "Nhan phim bat ky de tiep tuc..." RESET "\n");
+      system("pause > nul");
       continue;
     }
 
     switch (lua_chon) {
       case 1:
         thong_ke_theo_ngay();
+        printf("\n" BOLD GREEN "Nhan phim bat ky de tiep tuc..." RESET "\n");
+        system("pause > nul");
         break;
       case 2:
         thong_ke_theo_thang();
+        printf("\n" BOLD GREEN "Nhan phim bat ky de tiep tuc..." RESET "\n");
+        system("pause > nul");
         break;
       case 0:
         break;
       default:
         printf("Lua chon khong hop le!\n");
+        printf("\n" BOLD GREEN "Nhan phim bat ky de tiep tuc..." RESET "\n");
+        system("pause > nul");
     }
   } while (lua_chon != 0);
 }

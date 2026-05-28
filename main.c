@@ -8,6 +8,7 @@ int main() {
   int chuc_nang;
 
   do {
+
     printf("\n" BOLD BLUE "==============================================" RESET "\n");
     printf(BOLD CYAN "         HE THONG QUAN LY KHO HANG" RESET "\n");
     printf(BOLD BLUE "==============================================" RESET "\n");
@@ -28,6 +29,8 @@ int main() {
       while (getchar() != '\n')
         ;
 
+      printf("\n" BOLD GREEN "Nhan phim bat ky de tiep tuc..." RESET "\n");
+      system("pause > nul");
       continue;
     }
 
@@ -58,6 +61,11 @@ int main() {
       break;
     default:
       printf("Lua chon khong hop le! Vui long chon tu 0 den 6.\n");
+    }
+
+    if (chuc_nang != 0) {
+      printf("\n" BOLD GREEN "Nhan phim bat ky de tiep tuc..." RESET "\n");
+      system("pause > nul");
     }
 
   } while (chuc_nang != 0);
