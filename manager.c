@@ -16,7 +16,8 @@ int so_hang = 0;
 
 void createNode(char ma_hang[], char ten_hang[], char don_vi[],
                 NgayThang ngay_nhap, int so_luong, float don_gia,
-                int thu_muc_id, float thanh_tien, Node *newNode) {
+                int thu_muc_id, float thanh_tien, Node *newNode){
+
   newNode->value = (PhieuNhap *)malloc(sizeof(PhieuNhap));
   string_copy(newNode->value->ma_hang, ma_hang);
   string_copy(newNode->value->ten_hang, ten_hang);
@@ -153,40 +154,33 @@ void thong_ke_theo_thang() {
 
 void thong_ke_tong_tien() {
   int lua_chon;
+  int end = 0;
   do {
-    system("cls");
     printf("\n" BOLD CYAN "--- THONG KE TONG TIEN ---" RESET "\n");
     printf(YELLOW "1." RESET " Thong ke theo ngay\n");
     printf(YELLOW "2." RESET " Thong ke theo thang\n");
-    printf(RED "0." RESET " Quay lai\n");
+
     printf(BOLD "Chon loai thong ke: " RESET);
     if (scanf("%d", &lua_chon) != 1) {
       printf("Nhap sai! Vui long nhap so.\n");
+      // xoa sach bo dem (buffer) cua ban phim
       while (getchar() != '\n');
-      printf("\n" BOLD GREEN "Nhan phim bat ky de tiep tuc..." RESET "\n");
-      system("pause > nul");
       continue;
     }
 
     switch (lua_chon) {
       case 1:
         thong_ke_theo_ngay();
-        printf("\n" BOLD GREEN "Nhan phim bat ky de tiep tuc..." RESET "\n");
-        system("pause > nul");
+        end = 1;
         break;
       case 2:
         thong_ke_theo_thang();
-        printf("\n" BOLD GREEN "Nhan phim bat ky de tiep tuc..." RESET "\n");
-        system("pause > nul");
-        break;
-      case 0:
+        end = 1;
         break;
       default:
         printf("Lua chon khong hop le!\n");
-        printf("\n" BOLD GREEN "Nhan phim bat ky de tiep tuc..." RESET "\n");
-        system("pause > nul");
     }
-  } while (lua_chon != 0);
+  } while (!end);
 }
 
 void xoa_mat_hang() {
@@ -686,17 +680,18 @@ void sap_xep_danh_sach() {
   printf(YELLOW "3." RESET " Sap xep theo thu tu chu cai cua ma hang\n");
   printf(RED "0." RESET " Quay lai\n");
   printf(BOLD "Chon loai sap xep (0-3): " RESET);
-  if (scanf("%d", &lua_chon) != 1) {
+
+  if (scanf("%d", &lua_chon) != 1){
     printf(RED "Nhap sai! Vui long nhap so." RESET "\n");
     while (getchar() != '\n');
     return;
   }
 
-  if (lua_chon == 0) {
+  if (lua_chon == 0){
     return;
   }
 
-  if (lua_chon < 1 || lua_chon > 3) {
+  if (lua_chon < 1 || lua_chon > 3){
     printf(RED "Lua chon khong hop le!" RESET "\n");
     return;
   }
