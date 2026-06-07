@@ -53,134 +53,101 @@ void tinh_thanh_tien(PhieuNhap *phieu) {
   phieu->thanh_tien = tien_sau_giam * (1.0 + thue);
 }
 
-void thong_ke_theo_ngay() {
-  if (so_hang == 0) {
-    printf("khong co hang de thong ke");
-    return;
-  }
-  printf("\n--- THONG KE TONG TIEN THEO NGAY ---\n");
-  printf("+------------+----------------------+\n");
-  printf("| %-10s | %-20s |\n", "Ngay", "Tong Tien");
-  printf("+------------+----------------------+\n");
+static void nhap_thang_nam(int *thang, int *nam) {
+  int t_val, n_val;
+  char extra;
+  int result;
 
-  int da_duyet[so_hang];
-  for (int i = 0; i < so_hang; i++) {
-    da_duyet[i] = 0;
-  }
-
-  int i = 0;
-  Node *curNodei = danh_sach_hang;
-  while (i < so_hang) {
-    if (da_duyet[i]) {
-      i++;
-      curNodei = curNodei->next;
-      continue;
-    }
-
-    NgayThang ngay_dang_xet = curNodei->value->ngay_nhap;
-    float tong_tien_ngay = 0;
-
-    int j = i;
-    Node *curNodej = curNodei;
-
-    while (j < so_hang) {
-      if (cung_ngay(curNodei->value->ngay_nhap, curNodej->value->ngay_nhap)) {
-        tong_tien_ngay += curNodej->value->thanh_tien;
-        da_duyet[j] = 1;
+  while (1) {
+    printf(BOLD "Nhap thang can thong ke (1-12): " RESET);
+    result = scanf(" %d%c", &t_val, &extra);
+    
+    if (result == 2 && (extra == '\n' || extra == ' ' || extra == '\t' || extra == '\r')) {
+      if (t_val >= 1 && t_val <= 12) {
+        *thang = t_val;
+        break;
+      } else {
+        printf(BOLD RED "Loi logic: Thang phai nam trong khoang tu 1 den 12!\n\n" RESET);
       }
-      j++;
-
-      curNodej = curNodej->next;
+    } else {
+      printf(BOLD RED "Loi dinh dang: Thang khong hop le (phai la so nguyen)!\n\n" RESET);
+      // Clean buffer
+      int c;
+      while ((c = getchar()) != '\n' && c != EOF);
     }
-    i++;
-    curNodei = curNodei->next;
-
-    char ngay_str[20];
-    sprintf(ngay_str, "%02d/%02d/%04d", ngay_dang_xet.ngay, ngay_dang_xet.thang,
-            ngay_dang_xet.nam);
-    printf("| %-10s | %20.2f |\n", ngay_str, tong_tien_ngay);
-  }
-  printf("+------------+----------------------+\n");
-}
-
-void thong_ke_theo_thang() {
-  if (so_hang == 0) {
-    printf("khong co hang de thong ke");
-    return;
-  }
-  printf("\n--- THONG KE TONG TIEN THEO THANG ---\n");
-  printf("+---------+----------------------+\n");
-  printf("| %-7s | %-20s |\n", "Thang", "Tong Tien");
-  printf("+---------+----------------------+\n");
-
-  int da_duyet[so_hang];
-  for (int i = 0; i < so_hang; i++) {
-    da_duyet[i] = 0;
   }
 
-  int i = 0;
-  Node *curNodei = danh_sach_hang;
-  while (i < so_hang) {
-    if (da_duyet[i]) {
-      i++;
-      curNodei = curNodei->next;
-      continue;
-    }
-
-    NgayThang thang_dang_xet = curNodei->value->ngay_nhap;
-    float tong_tien_thang = 0;
-
-    int j = i;
-    Node *curNodej = curNodei;
-
-    while (j < so_hang) {
-      if (cung_thang(curNodei->value->ngay_nhap, curNodej->value->ngay_nhap)) {
-        tong_tien_thang += curNodej->value->thanh_tien;
-        da_duyet[j] = 1;
+  while (1) {
+    printf(BOLD "Nhap nam can thong ke (1000 - 9999): " RESET);
+    result = scanf(" %d%c", &n_val, &extra);
+    
+    if (result == 2 && (extra == '\n' || extra == ' ' || extra == '\t' || extra == '\r')) {
+      if (n_val >= 1000 && n_val <= 9999) {
+        *nam = n_val;
+        break;
+      } else {
+        printf(BOLD RED "Loi logic: Nam phai nam trong khoang tu 1000 den 9999!\n\n" RESET);
       }
-      j++;
-
-      curNodej = curNodej->next;
+    } else {
+      printf(BOLD RED "Loi dinh dang: Nam khong hop le (phai la so nguyen)!\n\n" RESET);
+      // Clean buffer
+      int c;
+      while ((c = getchar()) != '\n' && c != EOF);
     }
-    i++;
-    curNodei = curNodei->next;
-
-    char thang_str[20];
-    sprintf(thang_str, "%02d/%04d", thang_dang_xet.thang, thang_dang_xet.nam);
-    printf("| %-7s | %20.2f |\n", thang_str, tong_tien_thang);
   }
-  printf("+---------+----------------------+\n");
 }
 
 void thong_ke_tong_tien() {
-  int lua_chon;
-  int end = 0;
-  do {
-    printf("\n" BOLD CYAN "--- THONG KE TONG TIEN ---" RESET "\n");
-    printf(YELLOW "1." RESET " Thong ke theo ngay\n");
-    printf(YELLOW "2." RESET " Thong ke theo thang\n");
+  if (so_hang == 0) {
+    printf("khong co hang de thong ke\n");
+    return;
+  }
 
-    printf(BOLD "Chon loai thong ke: " RESET);
-    if (scanf("%d", &lua_chon) != 1) {
-      printf("Nhap sai! Vui long nhap so.\n");
-      // xoa sach bo dem (buffer) cua ban phim
-      while (getchar() != '\n');
-      continue;
+  int thang_tk, nam_tk;
+  nhap_thang_nam(&thang_tk, &nam_tk);
+
+  // Lấy tổng số ngày của tháng đó
+  int so_ngay = lay_so_ngay_trong_thang(thang_tk, nam_tk);
+
+  printf("\n" BOLD CYAN "+------------+----------------------------------+" RESET "\n");
+  printf(BOLD CYAN "|" RESET BOLD YELLOW " %-10s " RESET BOLD CYAN "|" RESET BOLD YELLOW " %-30s " RESET BOLD CYAN "|" RESET "\n", "Ngay", "Tong Tien (VND)");
+  printf(BOLD CYAN "+------------+----------------------------------+" RESET "\n");
+
+  float tong_tien_thang = 0;
+
+  // Lặp qua toàn bộ các ngày trong tháng (từ ngày 1 đến so_ngay)
+  for (int ngay = 1; ngay <= so_ngay; ngay++) {
+    float tong_tien_ngay = 0;
+    
+    // Duyệt danh sách liên kết xem có hàng nào khớp với ngày đang xét không
+    Node *curNode = danh_sach_hang;
+    while (curNode != NULL) {
+      NgayThang ngay_nhap = curNode->value->ngay_nhap;
+      
+      // Nếu khớp ngày, tháng, năm thì cộng dồn tiền
+      if (ngay_nhap.ngay == ngay && ngay_nhap.thang == thang_tk && ngay_nhap.nam == nam_tk) {
+        tong_tien_ngay += curNode->value->thanh_tien;
+      }
+      
+      curNode = curNode->next;
     }
 
-    switch (lua_chon) {
-      case 1:
-        thong_ke_theo_ngay();
-        end = 1;
-        break;
-      case 2:
-        thong_ke_theo_thang();
-        end = 1;
-        break;
-      default:
-        printf("Lua chon khong hop le!\n");
+    tong_tien_thang += tong_tien_ngay;
+
+    // In ra màn hình (kể cả khi tong_tien_ngay = 0)
+    char ngay_str[20];
+    sprintf(ngay_str, "%02d/%02d/%04d", ngay, thang_tk, nam_tk);
+    
+    if (tong_tien_ngay > 0) {
+      printf(BOLD CYAN "|" RESET " %-10s " BOLD CYAN "|" RESET GREEN " %30.2f " RESET BOLD CYAN "|" RESET "\n", ngay_str, tong_tien_ngay);
+    } else {
+      printf(BOLD CYAN "|" RESET " %-10s " BOLD CYAN "|" RESET " %30.2f " BOLD CYAN "|" RESET "\n", ngay_str, tong_tien_ngay);
     }
-  } while (!end);
+  }
+  
+  printf(BOLD CYAN "+------------+----------------------------------+" RESET "\n");
+  printf(BOLD CYAN "|" RESET BOLD YELLOW " %-10s " RESET BOLD CYAN "|" RESET BOLD GREEN " %30.2f " RESET BOLD CYAN "|" RESET "\n", "TONG CONG", tong_tien_thang);
+  printf(BOLD CYAN "+------------+----------------------------------+" RESET "\n");
 }
 
 void xoa_mat_hang() {

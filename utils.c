@@ -48,3 +48,18 @@ int check_trung_maHang(char maHang[], Node* danh_sach_hang){
     }
     return 0;
 }
+
+int lay_so_ngay_trong_thang(int thang, int nam) {
+    switch (thang) {
+        case 4: case 6: case 9: case 11:
+            return 30;
+        case 2:
+            // Kiểm tra năm nhuận
+            if ((nam % 4 == 0 && nam % 100 != 0) || (nam % 400 == 0)) {
+                return 29;
+            }
+            return 28;
+        default:
+            return 31;
+    }
+}
