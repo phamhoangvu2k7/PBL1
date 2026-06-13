@@ -63,7 +63,7 @@ int main() {
       printf("Lua chon khong hop le! Vui long chon tu 0 den 6.\n");
     }
 
-    if (chuc_nang != 0) {
+    if (chuc_nang != 0 && chuc_nang != 4 && chuc_nang != 7) {
       printf("\n" BOLD GREEN "Nhan phim bat ky de tiep tuc..." RESET "\n");
       system("pause > nul");
     }

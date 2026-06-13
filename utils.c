@@ -1,20 +1,5 @@
 #include "utils.h"
 #include "my_string.h"
-// bool start_with(const char *str, const char *key){
-//     return strncmp(str, key, strlen(key)) == 0;
-// }
-
-int cung_ngay(NgayThang product1, NgayThang product2){
-    if (product1.ngay == product2.ngay && product1.thang == product2.thang && product1.nam == product2.nam)
-        return 1;
-    return 0;
-}
-
-int cung_thang(NgayThang n1, NgayThang n2) {
-    if (n1.thang == n2.thang && n1.nam == n2.nam)
-        return 1;
-    return 0;
-}
 
 int so_sanh_ngay(NgayThang n1, NgayThang n2) {
     if (n1.nam != n2.nam) return n1.nam - n2.nam;

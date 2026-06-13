@@ -14,23 +14,6 @@ Node *danh_sach_hang = NULL;
 Node *cuoi_danh_sach;
 int so_hang = 0;
 
-void createNode(char ma_hang[], char ten_hang[], char don_vi[],
-                NgayThang ngay_nhap, int so_luong, float don_gia,
-                int thu_muc_id, float thanh_tien, Node *newNode){
-
-  newNode->value = (PhieuNhap *)malloc(sizeof(PhieuNhap));
-  string_copy(newNode->value->ma_hang, ma_hang);
-  string_copy(newNode->value->ten_hang, ten_hang);
-  string_copy(newNode->value->don_vi, don_vi);
-  newNode->value->ngay_nhap = ngay_nhap;
-  newNode->value->so_luong = so_luong;
-  newNode->value->don_gia = don_gia;
-  newNode->value->thu_muc_id = thu_muc_id;
-  newNode->value->thanh_tien = thanh_tien;
-
-  newNode->next = NULL;
-}
-
 float thue_thu_muc(int id_thumuc) {
   for (int i = 0; i < so_thu_muc; i++) {
     if (ds_thu_muc[i].id == id_thumuc)
@@ -236,153 +219,180 @@ void quan_ly_thue() {
   float thue_nhap;
   char ten_thu_muc_nhap[50];
 
-  printf("\n" BOLD CYAN "--- QUAN LY THUE THU MUC ---" RESET "\n");
-  printf(YELLOW "1." RESET " Sua thue\n");
-  printf(YELLOW "2." RESET " Xem thue\n");
-  printf(YELLOW "3." RESET " Xoa thue\n");
-  printf(YELLOW "4." RESET " Them thu muc moi\n");
-  printf(RED "0." RESET " Quay lai\n");
-  printf(BOLD "Chon chuc nang (0-4): " RESET);
-  if (scanf("%d", &lua_chon_menu) != 1) {
-    printf("Nhap sai! Vui long nhap so.\n");
-    while (getchar() != '\n');
-    return;
-  }
+  do {
+    printf("\n" BOLD CYAN "--- QUAN LY THUE THU MUC ---" RESET "\n");
+    printf(YELLOW "1." RESET " Sua thue\n");
+    printf(YELLOW "2." RESET " Xem thue\n");
+    printf(YELLOW "3." RESET " Xoa thue\n");
+    printf(YELLOW "4." RESET " Them thu muc moi\n");
+    printf(RED "0." RESET " Quay lai\n");
+    printf(BOLD "Chon chuc nang (0-4): " RESET);
 
-  if (lua_chon_menu == 0) {
-    return;
-  }
-
-  // xem thue
-  if (lua_chon_menu == 2) {
-    printf("\n" BOLD CYAN "+------+----------------------+------------+" RESET "\n");
-    printf(CYAN "|" RESET BOLD " %-4s " RESET CYAN "|" RESET BOLD " %-20s " RESET CYAN "|" RESET BOLD " %-10s " RESET CYAN "|" RESET "\n", 
-           "ID", "Ten Thu Muc", "Thue (%)");
-    printf(CYAN "+------+----------------------+------------+" RESET "\n");
-    for (int i = 0; i < so_thu_muc; i++) {
-      printf(CYAN "|" RESET " %-4d " CYAN "|" RESET " %-20s " CYAN "|" RESET " %9.2f%% " CYAN "|" RESET "\n", 
-             ds_thu_muc[i].id, ds_thu_muc[i].ten_thu_muc, ds_thu_muc[i].thue * 100);
-    }
-    printf(CYAN "+------+----------------------+------------+" RESET "\n\n");
-    return;
-  } 
-  
-  // sua thue/ xoa thue/ them thu muc moi
-  else if (lua_chon_menu == 1 || lua_chon_menu == 3 || lua_chon_menu == 4) {
-    if (lua_chon_menu == 4 && so_thu_muc >= MAX_CATEGORIES) {
-      printf("Danh sach thu muc da day!\n");
-      return;
+    if (scanf("%d", &lua_chon_menu) != 1) {
+      printf(BOLD RED "Nhap sai! Vui long nhap so." RESET "\n");
+      while (getchar() != '\n')
+        ;
+      printf("\n" BOLD GREEN "Nhan phim bat ky de tiep tuc..." RESET "\n");
+      system("pause > nul");
+      continue;
     }
 
-    printf("Nhap ten file du lieu (trong data/quan_ly_thue/): ");
-    scanf(" %s", ten_file);
-
-    sprintf(duong_dan, "data/quan_ly_thue/%s.txt", ten_file);
-    FILE *f = fopen(duong_dan, "r");
-    if (f == NULL) {
-      printf("Khong the mo file '%s'!\n", duong_dan);
-      return;
+    if (lua_chon_menu == 0) {
+      break;
     }
 
-    if (lua_chon_menu == 1) { 
-      // Bắt buộc đọc được đúng 2 số
-      if (fscanf(f, "%d %f", &id, &thue_nhap) != 2) {
-        printf("File khong dung dinh dang! (Yeu cau 2 so: ID va Thue moi)\n");
-        fclose(f);
-        return;
-      }
-    } else if (lua_chon_menu == 3) { 
-      // bat buoc chi co 1 so
-      float kiem_tra_du;
-      int so_luong_doc_duoc = fscanf(f, "%d %f", &id, &kiem_tra_du);
-      
-      if (so_luong_doc_duoc > 1) {
-        printf("File khong dung dinh dang! (Chuc nang xoa chi nhan file chua duy nhat 1 so ID)\n");
-        fclose(f);
-        return;
-      } else if (so_luong_doc_duoc != 1) {
-        printf("File khong dung dinh dang hoac file rong! (Yeu cau 1 so: ID)\n");
-        fclose(f);
-        return;
-      }
-    } else if (lua_chon_menu == 4) {
-      // Doc thong tin them thu muc moi: Ten thu muc va Thue (%)
-      if (fscanf(f, " %[^\n]", ten_thu_muc_nhap) != 1) {
-        printf("File khong dung dinh dang! (Yeu cau dong thu nhat la Ten thu muc)\n");
-        fclose(f);
-        return;
-      }
-      if (fscanf(f, "%f", &thue_nhap) != 1) {
-        printf("File khong dung dinh dang! (Yeu cau dong thu hai la Thue)\n");
-        fclose(f);
-        return;
-      }
-      
-      // Tu dong sinh ID = max_id + 1
-      int max_id = 0;
+    if (lua_chon_menu < 0 || lua_chon_menu > 4) {
+      printf(BOLD RED "Lua chon khong hop le! Vui long chon tu 0 den 4." RESET "\n");
+      printf("\n" BOLD GREEN "Nhan phim bat ky de tiep tuc..." RESET "\n");
+      system("pause > nul");
+      continue;
+    }
+
+    // xem thue
+    if (lua_chon_menu == 2) {
+      printf("\n" BOLD CYAN "+------+----------------------+------------+" RESET "\n");
+      printf(CYAN "|" RESET BOLD " %-4s " RESET CYAN "|" RESET BOLD " %-20s " RESET CYAN "|" RESET BOLD " %-10s " RESET CYAN "|" RESET "\n", 
+             "ID", "Ten Thu Muc", "Thue (%)");
+      printf(CYAN "+------+----------------------+------------+" RESET "\n");
       for (int i = 0; i < so_thu_muc; i++) {
-        if (ds_thu_muc[i].id > max_id) {
-          max_id = ds_thu_muc[i].id;
-        }
+        printf(CYAN "|" RESET " %-4d " CYAN "|" RESET " %-20s " CYAN "|" RESET " %9.2f%% " CYAN "|" RESET "\n", 
+               ds_thu_muc[i].id, ds_thu_muc[i].ten_thu_muc, ds_thu_muc[i].thue * 100);
       }
-      id = max_id + 1;
-    }
-    fclose(f);
+      printf(CYAN "+------+----------------------+------------+" RESET "\n\n");
+      
+      printf("\n" BOLD GREEN "Nhan phim bat ky de tiep tuc..." RESET "\n");
+      system("pause > nul");
+      continue;
+    } 
+    
+    // sua thue/ xoa thue/ them thu muc moi
+    if (lua_chon_menu == 1 || lua_chon_menu == 3 || lua_chon_menu == 4) {
+      if (lua_chon_menu == 4 && so_thu_muc >= MAX_CATEGORIES) {
+        printf(BOLD RED "Danh sach thu muc da day!" RESET "\n");
+        printf("\n" BOLD GREEN "Nhan phim bat ky de tiep tuc..." RESET "\n");
+        system("pause > nul");
+        continue;
+      }
 
-    // In thông tin đã đọc
-    if (lua_chon_menu == 1) {
-      printf(CYAN ">> ID thu muc: " RESET "%d\n", id);
-      printf(CYAN ">> Thue moi  : " RESET "%.0f%%\n", thue_nhap);
-    } else if (lua_chon_menu == 3) {
-      printf(CYAN ">> ID thu muc: " RESET "%d\n", id);
-    } else if (lua_chon_menu == 4) {
-      printf(CYAN ">> ID thu muc: " RESET "%d\n", id);
-      printf(CYAN ">> Ten thu muc: " RESET "%s\n", ten_thu_muc_nhap);
-      printf(CYAN ">> Thue       : " RESET "%.0f%%\n", thue_nhap);
-    }
+      printf("Nhap ten file du lieu (trong data/quan_ly_thue/): ");
+      scanf(" %s", ten_file);
 
-    // Xử lý logic Cập nhật/Xóa/Thêm
-    if (lua_chon_menu == 4) {
-      ds_thu_muc[so_thu_muc].id = id;
-      string_copy(ds_thu_muc[so_thu_muc].ten_thu_muc, ten_thu_muc_nhap);
-      ds_thu_muc[so_thu_muc].thue = thue_nhap / 100.0;
-      so_thu_muc++;
-      printf("Da them thu muc moi thanh cong!\n");
-      return;
-    }
+      sprintf(duong_dan, "data/quan_ly_thue/%s.txt", ten_file);
+      FILE *f = fopen(duong_dan, "r");
+      if (f == NULL) {
+        printf(BOLD RED "Khong the mo file '%s'!" RESET "\n", duong_dan);
+        printf("\n" BOLD GREEN "Nhan phim bat ky de tiep tuc..." RESET "\n");
+        system("pause > nul");
+        continue;
+      }
 
-    int tim_thay = 0;
-    for (int i = 0; i < so_thu_muc; i++) {
-      if (ds_thu_muc[i].id == id) {
-        tim_thay = 1;
+      int format_err = 0;
+      if (lua_chon_menu == 1) { 
+        // Bắt buộc đọc được đúng 2 số
+        if (fscanf(f, "%d %f", &id, &thue_nhap) != 2) {
+          printf(BOLD RED "File khong dung dinh dang! (Yeu cau 2 so: ID va Thue moi)" RESET "\n");
+          format_err = 1;
+        }
+      } else if (lua_chon_menu == 3) { 
+        // bat buoc chi co 1 so
+        float kiem_tra_du;
+        int so_luong_doc_duoc = fscanf(f, "%d %f", &id, &kiem_tra_du);
         
-        if (lua_chon_menu == 1) {
-          ds_thu_muc[i].thue = thue_nhap / 100.0;
-          printf("Da cap nhat thue thanh cong!\n");
-        } else {
-          ds_thu_muc[i].thue = 0.0;
-          printf("Da xoa thue (Set = 0%%)!\n");
+        if (so_luong_doc_duoc > 1) {
+          printf(BOLD RED "File khong dung dinh dang! (Chuc nang xoa chi nhan file chua duy nhat 1 so ID)" RESET "\n");
+          format_err = 1;
+        } else if (so_luong_doc_duoc != 1) {
+          printf(BOLD RED "File khong dung dinh dang hoac file rong! (Yeu cau 1 so: ID)" RESET "\n");
+          format_err = 1;
         }
-
-        // Duyệt danh sách liên kết để cập nhật lại thành tiền
-        Node *curNode = danh_sach_hang;
-        while (curNode != NULL) {
-          if (curNode->value->thu_muc_id == id) {
-            tinh_thanh_tien(curNode->value);
+      } else if (lua_chon_menu == 4) {
+        // Doc thong tin them thu muc moi: Ten thu muc va Thue (%)
+        if (fscanf(f, " %[^\n]", ten_thu_muc_nhap) != 1) {
+          printf(BOLD RED "File khong dung dinh dang! (Yeu cau dong thu nhat la Ten thu muc)" RESET "\n");
+          format_err = 1;
+        }
+        if (!format_err && fscanf(f, "%f", &thue_nhap) != 1) {
+          printf(BOLD RED "File khong dung dinh dang! (Yeu cau dong thu hai la Thue)" RESET "\n");
+          format_err = 1;
+        }
+        
+        if (!format_err) {
+          // Tu dong sinh ID = max_id + 1
+          int max_id = 0;
+          for (int i = 0; i < so_thu_muc; i++) {
+            if (ds_thu_muc[i].id > max_id) {
+              max_id = ds_thu_muc[i].id;
+            }
           }
-          curNode = curNode->next;
+          id = max_id + 1;
         }
-        break;
       }
-    }
+      fclose(f);
 
-    if (!tim_thay) {
-      printf("Khong tim thay ID thu muc nay!\n");
-    }
+      if (format_err) {
+        printf("\n" BOLD GREEN "Nhan phim bat ky de tiep tuc..." RESET "\n");
+        system("pause > nul");
+        continue;
+      }
 
-  } else {
-    printf("Lua chon khong hop le!\n");
-  }
+      // In thông tin đã đọc
+      if (lua_chon_menu == 1) {
+        printf(CYAN ">> ID thu muc: " RESET "%d\n", id);
+        printf(CYAN ">> Thue moi  : " RESET "%.0f%%\n", thue_nhap);
+      } else if (lua_chon_menu == 3) {
+        printf(CYAN ">> ID thu muc: " RESET "%d\n", id);
+      } else if (lua_chon_menu == 4) {
+        printf(CYAN ">> ID thu muc: " RESET "%d\n", id);
+        printf(CYAN ">> Ten thu muc: " RESET "%s\n", ten_thu_muc_nhap);
+        printf(CYAN ">> Thue       : " RESET "%.0f%%\n", thue_nhap);
+      }
+
+      // Xử lý logic Cập nhật/Xóa/Thêm
+      if (lua_chon_menu == 4) {
+        ds_thu_muc[so_thu_muc].id = id;
+        string_copy(ds_thu_muc[so_thu_muc].ten_thu_muc, ten_thu_muc_nhap);
+        ds_thu_muc[so_thu_muc].thue = thue_nhap / 100.0;
+        so_thu_muc++;
+        printf(BOLD GREEN "Da them thu muc moi thanh cong!" RESET "\n");
+        
+        printf("\n" BOLD GREEN "Nhan phim bat ky de tiep tuc..." RESET "\n");
+        system("pause > nul");
+        continue;
+      }
+
+      int tim_thay = 0;
+      for (int i = 0; i < so_thu_muc; i++) {
+        if (ds_thu_muc[i].id == id) {
+          tim_thay = 1;
+          
+          if (lua_chon_menu == 1) {
+            ds_thu_muc[i].thue = thue_nhap / 100.0;
+            printf(BOLD GREEN "Da cap nhat thue thanh cong!" RESET "\n");
+          } else {
+            ds_thu_muc[i].thue = 0.0;
+            printf(BOLD GREEN "Da xoa thue (Set = 0%%)!" RESET "\n");
+          }
+
+          // Duyệt danh sách liên kết để cập nhật lại thành tiền
+          Node *curNode = danh_sach_hang;
+          while (curNode != NULL) {
+            if (curNode->value->thu_muc_id == id) {
+              tinh_thanh_tien(curNode->value);
+            }
+            curNode = curNode->next;
+          }
+          break;
+        }
+      }
+
+      if (!tim_thay) {
+        printf(BOLD RED "Khong tim thay ID thu muc nay!" RESET "\n");
+      }
+      
+      printf("\n" BOLD GREEN "Nhan phim bat ky de tiep tuc..." RESET "\n");
+      system("pause > nul");
+    }
+  } while (lua_chon_menu != 0);
 }
 
 void thong_ke_kho_hang() {
@@ -633,61 +643,72 @@ void tim_kiem_theo_ma_hang() {
 }
 
 void sap_xep_danh_sach() {
-  if (danh_sach_hang == NULL || danh_sach_hang->next == NULL) {
-    printf("\nDanh sach rong hoac chi co 1 mat hang, khong can sap xep.\n");
-    if (danh_sach_hang != NULL)
-      thong_ke_kho_hang();
-    return;
-  }
-
   int lua_chon;
-  printf("\n" BOLD CYAN "--- SAP XEP DANH SACH ---" RESET "\n");
-  printf(YELLOW "1." RESET " Sap xep theo thanh tien\n");
-  printf(YELLOW "2." RESET " Sap xep theo ngay thang nhap\n");
-  printf(YELLOW "3." RESET " Sap xep theo thu tu chu cai cua ma hang\n");
-  printf(RED "0." RESET " Quay lai\n");
-  printf(BOLD "Chon loai sap xep (0-3): " RESET);
+  do {
+    printf("\n" BOLD CYAN "--- SAP XEP DANH SACH ---" RESET "\n");
+    printf(YELLOW "1." RESET " Sap xep theo thanh tien\n");
+    printf(YELLOW "2." RESET " Sap xep theo ngay thang nhap\n");
+    printf(YELLOW "3." RESET " Sap xep theo thu tu chu cai cua ma hang\n");
+    printf(RED "0." RESET " Quay lai\n");
+    printf(BOLD "Chon loai sap xep (0-3): " RESET);
 
-  if (scanf("%d", &lua_chon) != 1){
-    printf(RED "Nhap sai! Vui long nhap so." RESET "\n");
-    while (getchar() != '\n');
-    return;
-  }
+    if (scanf("%d", &lua_chon) != 1) {
+      printf(BOLD RED "Nhap sai! Vui long nhap so." RESET "\n");
+      while (getchar() != '\n')
+        ;
+      printf("\n" BOLD GREEN "Nhan phim bat ky de tiep tuc..." RESET "\n");
+      system("pause > nul");
+      continue;
+    }
 
-  if (lua_chon == 0){
-    return;
-  }
+    if (lua_chon == 0) {
+      break;
+    }
 
-  if (lua_chon < 1 || lua_chon > 3){
-    printf(RED "Lua chon khong hop le!" RESET "\n");
-    return;
-  }
+    if (lua_chon < 0 || lua_chon > 3) {
+      printf(BOLD RED "Lua chon khong hop le! Vui long chon tu 0 den 3." RESET "\n");
+      printf("\n" BOLD GREEN "Nhan phim bat ky de tiep tuc..." RESET "\n");
+      system("pause > nul");
+      continue;
+    }
 
-  Node *i, *j;
-  for (i = danh_sach_hang; i->next != NULL; i = i->next) {
-    for (j = i->next; j != NULL; j = j->next) {
-      int should_swap = 0;
-      if (lua_chon == 1) {
-        if (i->value->thanh_tien > j->value->thanh_tien)
-          should_swap = 1;
-      } else if (lua_chon == 2) {
-        if (so_sanh_ngay(i->value->ngay_nhap, j->value->ngay_nhap) > 0)
-          should_swap = 1;
-      } else if (lua_chon == 3) {
-        if (so_sanh_chu_cai(i->value->ma_hang, j->value->ma_hang) > 0)
-          should_swap = 1;
-      }
+    if (danh_sach_hang == NULL || danh_sach_hang->next == NULL) {
+      printf("\nDanh sach rong hoac chi co 1 mat hang, khong can sap xep.\n");
+      if (danh_sach_hang != NULL)
+        thong_ke_kho_hang();
+      printf("\n" BOLD GREEN "Nhan phim bat ky de tiep tuc..." RESET "\n");
+      system("pause > nul");
+      break;
+    }
 
-      if (should_swap) {
-        PhieuNhap *temp = i->value;
-        i->value = j->value;
-        j->value = temp;
+    Node *i, *j;
+    for (i = danh_sach_hang; i->next != NULL; i = i->next) {
+      for (j = i->next; j != NULL; j = j->next) {
+        int should_swap = 0;
+        if (lua_chon == 1) {
+          if (i->value->thanh_tien > j->value->thanh_tien)
+            should_swap = 1;
+        } else if (lua_chon == 2) {
+          if (so_sanh_ngay(i->value->ngay_nhap, j->value->ngay_nhap) > 0)
+            should_swap = 1;
+        } else if (lua_chon == 3) {
+          if (so_sanh_chu_cai(i->value->ma_hang, j->value->ma_hang) > 0)
+            should_swap = 1;
+        }
+
+        if (should_swap) {
+          PhieuNhap *temp = i->value;
+          i->value = j->value;
+          j->value = temp;
+        }
       }
     }
-  }
 
-  printf("\nDa sap xep xong!\n");
-  thong_ke_kho_hang();
+    printf("\nDa sap xep xong!\n");
+    thong_ke_kho_hang();
+    printf("\n" BOLD GREEN "Nhan phim bat ky de tiep tuc..." RESET "\n");
+    system("pause > nul");
+  } while (lua_chon != 0);
 }
 
 // clang-format off
