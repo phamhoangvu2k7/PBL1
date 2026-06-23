@@ -1,14 +1,5 @@
 #include "my_string.h"
 
-// int string_cmp(char a[], char b[], int n, int m){
-//     if(n != m) return 0;
-//     int i = 0;
-//     while(i < n){
-//         if(a[i] != b[i]) return 0;
-//         i++;
-//     }
-//     return 1;
-// }
 int string_cmp(char a[], char b[]){
     int i = 0;
     while(a[i] != '\0'){
@@ -40,6 +31,7 @@ int string_len(char a[], int max_size){
     return n;
 }
 
+//copy chuoi b vao chuoi a
 int string_copy(char a[], char b[]){
     int i = 0;
     while(b[i] != '\0'){

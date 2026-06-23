@@ -517,16 +517,9 @@ void nhap_hang(){
 
   Node *phieu_nhap_new = (Node *)malloc(sizeof(Node));
   phieu_nhap_new->value = (PhieuNhap *)malloc(sizeof(PhieuNhap));
+  int err = 0;
 
   fscanf(f, "%s", phieu_nhap_new->value->ma_hang);
-
-  if (check_trung_maHang(phieu_nhap_new->value->ma_hang, danh_sach_hang)){
-    printf("Ma hang '%s' da ton tai!\n", phieu_nhap_new->value->ma_hang);
-    free(phieu_nhap_new->value);
-    free(phieu_nhap_new);
-    fclose(f);
-    return;
-  }
 
   fscanf(f, " %[^\n]", phieu_nhap_new->value->ten_hang);
   fscanf(f, "%d", &phieu_nhap_new->value->so_luong);
@@ -538,7 +531,23 @@ void nhap_hang(){
   fscanf(f, " %[^\n]", phieu_nhap_new->value->don_vi);
   fscanf(f, "%f", &phieu_nhap_new->value->don_gia);
   fscanf(f, "%d", &phieu_nhap_new->value->thu_muc_id);
+
+
+  if (check_trung_maHang(phieu_nhap_new->value->ma_hang, danh_sach_hang)){
+    printf(RED "Ma hang '%s' da ton tai!" RESET "\n", phieu_nhap_new->value->ma_hang);
+    err = 1;
+  }
+  if(phieu_nhap_new->value->thu_muc_id > so_thu_muc){
+    printf(RED "Thu muc co id %d khong ton tai!" RESET "\n",  phieu_nhap_new->value->thu_muc_id);
+    err = 1;
+  }
   fclose(f);
+
+  if(err){
+    free(phieu_nhap_new->value);
+    free(phieu_nhap_new);
+    return;
+  }
 
   printf(CYAN ">> Ma hang   : " RESET "%s\n", phieu_nhap_new->value->ma_hang);
   printf(CYAN ">> Ten hang  : " RESET "%s\n", phieu_nhap_new->value->ten_hang);
