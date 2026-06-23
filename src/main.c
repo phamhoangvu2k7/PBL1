@@ -1,5 +1,5 @@
-#include "manager.h"
-#include "utils.h"
+#include "../library/manager.h"
+#include "../library/utils.h"
 #include <stdio.h>
 
 int main() {

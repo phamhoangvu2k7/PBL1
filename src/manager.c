@@ -1,11 +1,10 @@
-#include "manager.h"
-
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "common.h"
-#include "my_string.h"
-#include "utils.h"
+#include "../library/manager.h"
+#include "../library/common.h"
+#include "../library/my_string.h"
+#include "../library/utils.h"
 
 ThuMuc ds_thu_muc[MAX_CATEGORIES];
 int so_thu_muc = 0;
@@ -110,8 +109,8 @@ void xoa_mat_hang(){
     return;
   }
 
-  char input_don_vi[100];
-  char input_ma_hang[100];
+  char input_don_vi[20];
+  char input_ma_hang[20];
 
   int read_status = 0;
   if (fscanf(f, "%s", input_don_vi) != 1 || fscanf(f, "%s", input_ma_hang) != 1) {
@@ -179,7 +178,7 @@ void quan_ly_thue(){
   char duong_dan[200];
   int lua_chon_menu, id;
   float thue_nhap;
-  char ten_thu_muc_nhap[100];
+  char ten_thu_muc_nhap[50];
 
   do{
     printf("\n" BOLD CYAN "--- QUAN LY THUE THU MUC ---" RESET "\n");
@@ -628,7 +627,7 @@ void nhap_hang(){
 }
 
 void tim_kiem_theo_ma_hang(){
-  char ma_hang_tim[100];
+  char ma_hang_tim[20];
   printf("\n--- TIM KIEM MAT HANG THEO MA ---\n");
   printf("Nhap ma hang can tim: ");
   scanf(" %s", ma_hang_tim);

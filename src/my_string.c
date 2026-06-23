@@ -1,4 +1,4 @@
-#include "my_string.h"
+#include "../library/my_string.h"
 
 int string_cmp(char a[], char b[]){
     int i = 0;
