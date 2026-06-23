@@ -51,6 +51,17 @@ void thong_ke_tong_tien(){
   printf(BOLD CYAN "|" RESET BOLD YELLOW " %-10s " RESET BOLD CYAN "|" RESET BOLD YELLOW " %-30s " RESET BOLD CYAN "|" RESET "\n", "Ngay", "Tong Tien (VND)");
   printf(BOLD CYAN "+------------+----------------------------------+" RESET "\n");
 
+  FILE *f = fopen("data/out/out_thong_ke_tong_tien.txt", "w");
+  if (f == NULL) {
+    printf(RED "Loi: Khong the mo file data/out/out_thong_ke_tong_tien.txt de ghi!" RESET "\n");
+  } else {
+    fprintf(f, "----- THONG KE TONG TIEN THEO THANG -----\n");
+    fprintf(f, "Thang: %02d, Nam: %d\n\n", thang_tk, nam_tk);
+    fprintf(f, "+------------+----------------------------------+\n");
+    fprintf(f, "| %-10s | %-30s |\n", "Ngay", "Tong Tien (VND)");
+    fprintf(f, "+------------+----------------------------------+\n");
+  }
+
   float tong_tien_thang = 0;
 
   // lap qua tung ngay trong thang
@@ -82,11 +93,23 @@ void thong_ke_tong_tien(){
     else{
       printf(BOLD CYAN "|" RESET " %-10s " BOLD CYAN "|" RESET " %30.2f " BOLD CYAN "|" RESET "\n", ngay_str, tong_tien_ngay);
     }
+
+    if (f != NULL) {
+      fprintf(f, "| %-10s | %30.2f |\n", ngay_str, tong_tien_ngay);
+    }
   }
   
   printf(BOLD CYAN "+------------+----------------------------------+" RESET "\n");
   printf(BOLD CYAN "|" RESET BOLD YELLOW " %-10s " RESET BOLD CYAN "|" RESET BOLD GREEN " %30.2f " RESET BOLD CYAN "|" RESET "\n", "TONG CONG", tong_tien_thang);
   printf(BOLD CYAN "+------------+----------------------------------+" RESET "\n");
+
+  if (f != NULL) {
+    fprintf(f, "+------------+----------------------------------+\n");
+    fprintf(f, "| %-10s | %30.2f |\n", "TONG CONG", tong_tien_thang);
+    fprintf(f, "+------------+----------------------------------+\n");
+    fclose(f);
+    printf(GREEN "Da tu dong ghi bao cao vao file data/out/out_thong_ke_tong_tien.txt!" RESET "\n");
+  }
 }
 
 void xoa_mat_hang(){
@@ -219,6 +242,23 @@ void quan_ly_thue(){
                ds_thu_muc[i].id, ds_thu_muc[i].ten_thu_muc, ds_thu_muc[i].thue * 100);
       }
       printf(CYAN "+------+----------------------+------------+" RESET "\n\n");
+
+      FILE *f = fopen("data/out/out_ds_thu_muc.txt", "w");
+      if (f == NULL) {
+        printf(RED "Loi: Khong the mo file data/out/out_ds_thu_muc.txt de ghi!" RESET "\n");
+      } else {
+        fprintf(f, "----- DANH SACH THU MUC VA THUE AP DUNG -----\n\n");
+        fprintf(f, "+------+----------------------+------------+\n");
+        fprintf(f, "| %-4s | %-20s | %-10s |\n", "ID", "Ten Thu Muc", "Thue (%)");
+        fprintf(f, "+------+----------------------+------------+\n");
+        for (int i = 0; i < so_thu_muc; i++) {
+          fprintf(f, "| %-4d | %-20s | %9.2f%% |\n", 
+                  ds_thu_muc[i].id, ds_thu_muc[i].ten_thu_muc, ds_thu_muc[i].thue * 100);
+        }
+        fprintf(f, "+------+----------------------+------------+\n");
+        fclose(f);
+        printf(GREEN "Da tu dong ghi bao cao vao file data/out/out_ds_thu_muc.txt!" RESET "\n");
+      }
       
       printf("\n" BOLD GREEN "Nhan phim bat ky de tiep tuc..." RESET "\n");
       system("pause > nul");
@@ -335,7 +375,8 @@ void quan_ly_thue(){
           if (lua_chon_menu == 1){
             ds_thu_muc[i].thue = thue_nhap / 100.0;
             printf(BOLD GREEN "Da cap nhat thue thanh cong!" RESET "\n");
-          } else{
+          }
+          else{
             ds_thu_muc[i].thue = 0.0;
             printf(BOLD GREEN "Da xoa thue (Set = 0%%)!" RESET "\n");
           }
@@ -380,6 +421,19 @@ void thong_ke_kho_hang(){
   printf(CYAN "+----------+--------------------------+------------+------------"
               "+----------+--------------+------------+------------+-----------------+-----------------+" RESET
               "\n");
+
+  FILE *f = fopen("data/out/out_thong_ke_kho_hang.txt", "w");
+  if (f == NULL) {
+    printf(RED "Loi: Khong the mo file data/out/out_thong_ke_kho_hang.txt de ghi!" RESET "\n");
+  } else {
+    fprintf(f, "----- THONG KE KHO HANG -----\n\n");
+    fprintf(f, "+----------+--------------------------+------------+------------+----------+--------------+------------+------------+-----------------+-----------------+\n");
+    fprintf(f, "| %-8s | %-24s | %-10s | %-10s | %-8s | %-12s | %-10s | %-10s | %-15s | %-15s |\n",
+            "Ma Hang", "Ten Hang", "Don Vi", "Ngay Nhap", "So Luong", "Don Gia",
+            "ID Thu Muc", "Thue (%)", "Tien Thue", "Thanh Tien");
+    fprintf(f, "+----------+--------------------------+------------+------------+----------+--------------+------------+------------+-----------------+-----------------+\n");
+  }
+
   while (p != NULL){
     char ngay_nhap[20];
     sprintf(ngay_nhap, "%02d/%02d/%04d", p->value->ngay_nhap.ngay,
@@ -395,12 +449,25 @@ void thong_ke_kho_hang(){
            p->value->ma_hang, p->value->ten_hang, p->value->don_vi, ngay_nhap,
            p->value->so_luong, p->value->don_gia, p->value->thu_muc_id,
            thue_ap_dung * 100, tien_thue, p->value->thanh_tien);
+
+    if (f != NULL) {
+      fprintf(f, "| %-8s | %-24s | %-10s | %-10s | %8d | %12.3f | %10d | %9.2f%% | %15.2f | %15.2f |\n",
+              p->value->ma_hang, p->value->ten_hang, p->value->don_vi, ngay_nhap,
+              p->value->so_luong, p->value->don_gia, p->value->thu_muc_id,
+              thue_ap_dung * 100, tien_thue, p->value->thanh_tien);
+    }
     p = p->next;
   }
 
   printf(CYAN "+----------+--------------------------+------------+------------"
               "+----------+--------------+------------+------------+-----------------+-----------------+" RESET
               "\n");
+
+  if (f != NULL) {
+    fprintf(f, "+----------+--------------------------+------------+------------+----------+--------------+------------+------------+-----------------+-----------------+\n");
+    fclose(f);
+    printf(GREEN "Da tu dong ghi bao cao vao file data/out/out_thong_ke_kho_hang.txt!" RESET "\n");
+  }
 }
 
 void tao_du_lieu_mau(){
@@ -735,6 +802,42 @@ void sap_xep_danh_sach(){
 
     printf("\nDa sap xep xong!\n");
     thong_ke_kho_hang();
+
+    FILE *f_sort = fopen("data/out/out_sap_xep_danh_sach.txt", "w");
+    if (f_sort == NULL) {
+      printf(RED "Loi: Khong the mo file data/out/out_sap_xep_danh_sach.txt de ghi!" RESET "\n");
+    } else {
+      fprintf(f_sort, "----- DANH SACH MAT HANG DA SAP XEP -----\n");
+      if (lua_chon == 1) fprintf(f_sort, "(Tieu chi sap xep: Thanh tien)\n\n");
+      else if (lua_chon == 2) fprintf(f_sort, "(Tieu chi sap xep: Ngay thang nhap)\n\n");
+      else if (lua_chon == 3) fprintf(f_sort, "(Tieu chi sap xep: Ma hang)\n\n");
+
+      fprintf(f_sort, "+----------+--------------------------+------------+------------+----------+--------------+------------+------------+-----------------+-----------------+\n");
+      fprintf(f_sort, "| %-8s | %-24s | %-10s | %-10s | %-8s | %-12s | %-10s | %-10s | %-15s | %-15s |\n",
+              "Ma Hang", "Ten Hang", "Don Vi", "Ngay Nhap", "So Luong", "Don Gia",
+              "ID Thu Muc", "Thue (%)", "Tien Thue", "Thanh Tien");
+      fprintf(f_sort, "+----------+--------------------------+------------+------------+----------+--------------+------------+------------+-----------------+-----------------+\n");
+      
+      Node *curr = danh_sach_hang;
+      while (curr != NULL) {
+        char ngay_nhap[20];
+        sprintf(ngay_nhap, "%02d/%02d/%04d", curr->value->ngay_nhap.ngay,
+                curr->value->ngay_nhap.thang, curr->value->ngay_nhap.nam);
+
+        float thue_ap_dung = thue_thu_muc(curr->value->thu_muc_id);
+        float tien_thue = (curr->value->thanh_tien / (1.0 + thue_ap_dung)) * thue_ap_dung;
+
+        fprintf(f_sort, "| %-8s | %-24s | %-10s | %-10s | %8d | %12.3f | %10d | %9.2f%% | %15.2f | %15.2f |\n",
+                curr->value->ma_hang, curr->value->ten_hang, curr->value->don_vi, ngay_nhap,
+                curr->value->so_luong, curr->value->don_gia, curr->value->thu_muc_id,
+                thue_ap_dung * 100, tien_thue, curr->value->thanh_tien);
+        curr = curr->next;
+      }
+      fprintf(f_sort, "+----------+--------------------------+------------+------------+----------+--------------+------------+------------+-----------------+-----------------+\n");
+      fclose(f_sort);
+      printf(GREEN "Da tu dong ghi danh sach da sap xep vao file data/out/out_sap_xep_danh_sach.txt!" RESET "\n");
+    }
+
     printf("\n" BOLD GREEN "Nhan phim bat ky de tiep tuc..." RESET "\n");
     system("pause > nul");
   } while (lua_chon != 0);
