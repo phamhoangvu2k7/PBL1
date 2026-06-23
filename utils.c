@@ -23,10 +23,8 @@ int check_trung_maHang(char maHang[], Node* danh_sach_hang){
     Node *cur = danh_sach_hang;
     
     while(cur != NULL){
-        int n = string_len(cur->value->ma_hang, 40);
-        int m = string_len(maHang, 40);
 
-        if(string_cmp(cur->value->ma_hang, maHang, n, m)){
+        if(string_cmp(cur->value->ma_hang, maHang)){
             return 1;
         }
         cur = cur->next;
