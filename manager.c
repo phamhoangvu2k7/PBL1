@@ -295,7 +295,7 @@ void quan_ly_thue(){
         continue;
       }
 
-      // In thông tin đã đọc
+      // in thong tin
       if (lua_chon_menu == 1){
         printf(CYAN ">> ID thu muc: " RESET "%d\n", id);
         printf(CYAN ">> Thue moi  : " RESET "%.0f%%\n", thue_nhap);
@@ -537,7 +537,7 @@ void nhap_hang(){
     printf(RED "Ma hang '%s' da ton tai!" RESET "\n", phieu_nhap_new->value->ma_hang);
     err = 1;
   }
-  if(phieu_nhap_new->value->thu_muc_id > so_thu_muc){
+  if(phieu_nhap_new->value->thu_muc_id > so_thu_muc || phieu_nhap_new->value->thu_muc_id <= 0){
     printf(RED "Thu muc co id %d khong ton tai!" RESET "\n",  phieu_nhap_new->value->thu_muc_id);
     err = 1;
   }
@@ -554,7 +554,7 @@ void nhap_hang(){
   printf(CYAN ">> So luong  : " RESET "%d\n", phieu_nhap_new->value->so_luong);
   printf(CYAN ">> Ngay nhap : " RESET "%02d/%02d/%04d\n", date.ngay, date.thang, date.nam);
   printf(CYAN ">> Don vi    : " RESET "%s\n", phieu_nhap_new->value->don_vi);
-  printf(CYAN ">> Don gia   : " RESET "%.0f\n", phieu_nhap_new->value->don_gia);
+  printf(CYAN ">> Don gia   : " RESET "%.2f\n", phieu_nhap_new->value->don_gia);
   printf(CYAN ">> ID Thu muc: " RESET "%d\n", phieu_nhap_new->value->thu_muc_id);
 
   tinh_thanh_tien(phieu_nhap_new->value);
