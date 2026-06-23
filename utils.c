@@ -75,3 +75,43 @@ int nhap_so_nguyen(int *val) {
         return 0;
     }
 }
+
+void nhap_thang_nam(int *thang, int *nam){
+  int thang_ip, nam_ip;
+
+  while (1){
+    printf(BOLD "Nhap thang can thong ke (1-12): " RESET);
+    if (nhap_so_nguyen(&thang_ip)){
+
+      if (thang_ip >= 1 && thang_ip <= 12){
+        *thang = thang_ip;
+        break;
+      }
+      else{
+        printf(BOLD RED "Loi logic: Thang phai nam trong khoang tu 1 den 12!\n\n" RESET);
+      }
+    }
+    
+    else{
+      printf(BOLD RED "Loi dinh dang: Thang khong hop le (phai la so nguyen)!\n\n" RESET);
+    }
+  }
+
+  while (1){
+    printf(BOLD "Nhap nam can thong ke (1000 - 9999): " RESET);
+    
+    if (nhap_so_nguyen(&nam_ip)){
+      if (nam_ip >= 1000 && nam_ip <= 9999){
+        *nam = nam_ip;
+        break;
+      }
+      else{
+        printf(BOLD RED "Loi logic: Nam phai nam trong khoang tu 1000 den 9999!\n\n" RESET);
+      }
+    }
+    
+    else{
+      printf(BOLD RED "Loi dinh dang: Nam khong hop le (phai la so nguyen)!\n\n" RESET);
+    }
+  }
+}
