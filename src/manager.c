@@ -1,11 +1,10 @@
-#include "manager.h"
-
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "common.h"
-#include "my_string.h"
-#include "utils.h"
+#include "../library/manager.h"
+#include "../library/common.h"
+#include "../library/my_string.h"
+#include "../library/utils.h"
 
 ThuMuc ds_thu_muc[MAX_CATEGORIES];
 int so_thu_muc = 0;

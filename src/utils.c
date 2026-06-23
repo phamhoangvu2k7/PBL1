@@ -1,5 +1,5 @@
-#include "utils.h"
-#include "my_string.h"
+#include "../library/utils.h"
+#include "../library/my_string.h"
 
 int so_sanh_ngay(NgayThang n1, NgayThang n2) {
     if (n1.nam != n2.nam) return n1.nam - n2.nam;
