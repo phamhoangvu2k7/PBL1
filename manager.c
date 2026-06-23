@@ -37,45 +37,41 @@ void tinh_thanh_tien(PhieuNhap *phieu){
 }
 
 static void nhap_thang_nam(int *thang, int *nam){
-  int t_val, n_val;
-  char extra;
-  int result;
+  int thang_ip, nam_ip;
 
   while (1){
     printf(BOLD "Nhap thang can thong ke (1-12): " RESET);
-    result = scanf(" %d%c", &t_val, &extra);
-    
-    if (result == 2 && (extra == '\n' || extra == ' ' || extra == '\t' || extra == '\r')){
-      if (t_val >= 1 && t_val <= 12){
-        *thang = t_val;
+    if (nhap_so_nguyen(&thang_ip)){
+
+      if (thang_ip >= 1 && thang_ip <= 12){
+        *thang = thang_ip;
         break;
-      } else{
+      }
+      else{
         printf(BOLD RED "Loi logic: Thang phai nam trong khoang tu 1 den 12!\n\n" RESET);
       }
-    } else{
+    }
+    
+    else{
       printf(BOLD RED "Loi dinh dang: Thang khong hop le (phai la so nguyen)!\n\n" RESET);
-      // Clean buffer
-      int c;
-      while ((c = getchar()) != '\n' && c != EOF);
     }
   }
 
   while (1){
     printf(BOLD "Nhap nam can thong ke (1000 - 9999): " RESET);
-    result = scanf(" %d%c", &n_val, &extra);
     
-    if (result == 2 && (extra == '\n' || extra == ' ' || extra == '\t' || extra == '\r')){
-      if (n_val >= 1000 && n_val <= 9999){
-        *nam = n_val;
+    if (nhap_so_nguyen(&nam_ip)){
+      if (nam_ip >= 1000 && nam_ip <= 9999){
+        *nam = nam_ip;
         break;
-      } else{
+      }
+      else{
         printf(BOLD RED "Loi logic: Nam phai nam trong khoang tu 1000 den 9999!\n\n" RESET);
       }
-    } else{
+    }
+    
+    else{
       printf(BOLD RED "Loi dinh dang: Nam khong hop le (phai la so nguyen)!\n\n" RESET);
-      // Clean buffer
-      int c;
-      while ((c = getchar()) != '\n' && c != EOF);
     }
   }
 }
@@ -89,7 +85,7 @@ void thong_ke_tong_tien(){
   int thang_tk, nam_tk;
   nhap_thang_nam(&thang_tk, &nam_tk);
 
-  // Lấy tổng số ngày của tháng đó
+  // lay so ngay trong thang do
   int so_ngay = lay_so_ngay_trong_thang(thang_tk, nam_tk);
 
   printf("\n" BOLD CYAN "+------------+----------------------------------+" RESET "\n");
@@ -98,16 +94,16 @@ void thong_ke_tong_tien(){
 
   float tong_tien_thang = 0;
 
-  // Lặp qua toàn bộ các ngày trong tháng (từ ngày 1 đến so_ngay)
+  // lap qua tung ngay trong thang
   for (int ngay = 1; ngay <= so_ngay; ngay++){
     float tong_tien_ngay = 0;
     
-    // Duyệt danh sách liên kết xem có hàng nào khớp với ngày đang xét không
+    //tim mat hang co date trung khop
     Node *curNode = danh_sach_hang;
     while (curNode != NULL){
       NgayThang ngay_nhap = curNode->value->ngay_nhap;
       
-      // Nếu khớp ngày, tháng, năm thì cộng dồn tiền
+      //neu khop thi cong don tien
       if (ngay_nhap.ngay == ngay && ngay_nhap.thang == thang_tk && ngay_nhap.nam == nam_tk){
         tong_tien_ngay += curNode->value->thanh_tien;
       }
@@ -117,13 +113,14 @@ void thong_ke_tong_tien(){
 
     tong_tien_thang += tong_tien_ngay;
 
-    // In ra màn hình (kể cả khi tong_tien_ngay = 0)
+    //in ra man hinh
     char ngay_str[20];
     sprintf(ngay_str, "%02d/%02d/%04d", ngay, thang_tk, nam_tk);
     
     if (tong_tien_ngay > 0){
       printf(BOLD CYAN "|" RESET " %-10s " BOLD CYAN "|" RESET GREEN " %30.2f " RESET BOLD CYAN "|" RESET "\n", ngay_str, tong_tien_ngay);
-    } else{
+    }
+    else{
       printf(BOLD CYAN "|" RESET " %-10s " BOLD CYAN "|" RESET " %30.2f " BOLD CYAN "|" RESET "\n", ngay_str, tong_tien_ngay);
     }
   }
@@ -226,9 +223,8 @@ void quan_ly_thue(){
     printf(RED "0." RESET " Quay lai\n");
     printf(BOLD "Chon chuc nang (0-4): " RESET);
 
-    if (scanf("%d", &lua_chon_menu) != 1){
-      printf(BOLD RED "Nhap sai! Vui long nhap so." RESET "\n");
-      while (getchar() != '\n');
+    if (!nhap_so_nguyen(&lua_chon_menu)){
+      printf(BOLD RED "Nhap sai! Vui long nhap so nguyen." RESET "\n");
 
       printf("\n" BOLD GREEN "Nhan phim bat ky de tiep tuc..." RESET "\n");
       system("pause > nul");
@@ -351,10 +347,11 @@ void quan_ly_thue(){
         printf(CYAN ">> Thue       : " RESET "%.0f%%\n", thue_nhap);
       }
 
-      // Xử lý logic Cập nhật/Xóa/Thêm
+      // XU ly logic cap nhat/ xoa / them
       if (lua_chon_menu == 4){
         ds_thu_muc[so_thu_muc].id = id;
         string_copy(ds_thu_muc[so_thu_muc].ten_thu_muc, ten_thu_muc_nhap);
+        
         ds_thu_muc[so_thu_muc].thue = thue_nhap / 100.0;
         so_thu_muc++;
         printf(BOLD GREEN "Da them thu muc moi thanh cong!" RESET "\n");
@@ -446,7 +443,7 @@ void tao_du_lieu_mau(){
   cuoi_danh_sach = NULL;
   so_hang = 0;
 
-  // 1. Doc danh sach thu muc
+  // Doc danh sach thu muc
   FILE *f1 = fopen("data/data_mau/ds_thu_muc.txt", "r");
   if (f1 == NULL){
     printf("Khong the mo file data/data_mau/ds_thu_muc.txt de nap du lieu mau!\n");
@@ -464,7 +461,7 @@ void tao_du_lieu_mau(){
   }
   fclose(f1);
 
-  // 2. Doc danh sach hang hoa
+  // Doc danh sach hang hoa
   FILE *f2 = fopen("data/data_mau/ds_hang.txt", "r");
   if (f2 == NULL){
     printf("Khong the mo file data/data_mau/ds_hang.txt de nap du lieu mau!\n");
@@ -476,6 +473,7 @@ void tao_du_lieu_mau(){
       Node *newNode = (Node *)malloc(sizeof(Node));
       newNode->value = (PhieuNhap *)malloc(sizeof(PhieuNhap));
       
+      //doc bi thieu thong tin thi lạp tuc dung doc
       if (fscanf(f2, "%s", newNode->value->ma_hang) != 1){
         free(newNode->value);
         free(newNode);
@@ -517,9 +515,11 @@ void tao_du_lieu_mau(){
       tinh_thanh_tien(newNode->value);
       newNode->next = NULL;
       
+      //them vao cuoi danh sach
       if (danh_sach_hang == NULL){
         danh_sach_hang = cuoi_danh_sach = newNode;
-      } else{
+      }
+      else{
         cuoi_danh_sach->next = newNode;
         cuoi_danh_sach = newNode;
       }
@@ -658,9 +658,8 @@ void sap_xep_danh_sach(){
     printf(RED "0." RESET " Quay lai\n");
     printf(BOLD "Chon loai sap xep (0-3): " RESET);
 
-    if (scanf("%d", &lua_chon) != 1){
-      printf(BOLD RED "Nhap sai! Vui long nhap so." RESET "\n");
-      while (getchar() != '\n');
+    if (!nhap_so_nguyen(&lua_chon)){
+      printf(BOLD RED "Nhap sai! Vui long nhap so nguyen." RESET "\n");
       printf("\n" BOLD GREEN "Nhan phim bat ky de tiep tuc..." RESET "\n");
       system("pause > nul");
       continue;
@@ -689,23 +688,23 @@ void sap_xep_danh_sach(){
     Node *i, *j;
     for (i = danh_sach_hang; i->next != NULL; i = i->next){
       for (j = i->next; j != NULL; j = j->next){
-        int should_swap = 0;
+        int swap = 0;
         if (lua_chon == 1){
           if (i->value->thanh_tien > j->value->thanh_tien)
-            should_swap = 1;
+            swap = 1;
         }
         
         else if (lua_chon == 2){
           if (so_sanh_ngay(i->value->ngay_nhap, j->value->ngay_nhap) > 0)
-            should_swap = 1;
+            swap = 1;
         }
         
         else if (lua_chon == 3){
           if (so_sanh_chu_cai(i->value->ma_hang, j->value->ma_hang) > 0)
-            should_swap = 1;
+            swap = 1;
         }
 
-        if (should_swap){
+        if (swap){
           PhieuNhap *temp = i->value;
           i->value = j->value;
           j->value = temp;

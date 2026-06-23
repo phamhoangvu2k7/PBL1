@@ -1,4 +1,5 @@
 #include "manager.h"
+#include "utils.h"
 #include <stdio.h>
 
 int main() {
@@ -23,11 +24,8 @@ int main() {
     printf(BOLD BLUE "----------------------------------------------" RESET "\n");
     printf(BOLD "Chon chuc nang: " RESET);
 
-    if (scanf("%d", &chuc_nang) != 1) {
-      printf("Nhap sai! Vui long nhap so.\n");
-
-      while (getchar() != '\n')
-        ;
+    if (!nhap_so_nguyen(&chuc_nang)) {
+      printf("Nhap sai! Vui long nhap so nguyen.\n");
 
       printf("\n" BOLD GREEN "Nhan phim bat ky de tiep tuc..." RESET "\n");
       system("pause > nul");
