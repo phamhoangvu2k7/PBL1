@@ -110,12 +110,19 @@ void xoa_mat_hang(){
     return;
   }
 
-  char input_don_vi[40];
-  char input_ma_hang[40];
+  char input_don_vi[100];
+  char input_ma_hang[100];
 
-  fscanf(f, "%s", input_don_vi);
-  fscanf(f, "%s", input_ma_hang);
+  int read_status = 0;
+  if (fscanf(f, "%s", input_don_vi) != 1 || fscanf(f, "%s", input_ma_hang) != 1) {
+    printf(RED "Loi: File xoa hang khong dung dinh dang hoac bi rong!" RESET "\n");
+    read_status = 1;
+  }
   fclose(f);
+
+  if (read_status) {
+    return;
+  }
 
   printf(CYAN ">> Don vi  : " RESET "%s\n", input_don_vi);
   printf(CYAN ">> Ma hang : " RESET "%s\n", input_ma_hang);
@@ -172,7 +179,7 @@ void quan_ly_thue(){
   char duong_dan[200];
   int lua_chon_menu, id;
   float thue_nhap;
-  char ten_thu_muc_nhap[50];
+  char ten_thu_muc_nhap[100];
 
   do{
     printf("\n" BOLD CYAN "--- QUAN LY THUE THU MUC ---" RESET "\n");
@@ -519,25 +526,71 @@ void nhap_hang(){
   phieu_nhap_new->value = (PhieuNhap *)malloc(sizeof(PhieuNhap));
   int err = 0;
 
-  fscanf(f, "%s", phieu_nhap_new->value->ma_hang);
+  if (fscanf(f, "%s", phieu_nhap_new->value->ma_hang) != 1) {
+    printf(RED "Loi: Khong doc duoc ma hang tu file!" RESET "\n");
+    err = 1;
+  }
 
-  fscanf(f, " %[^\n]", phieu_nhap_new->value->ten_hang);
-  fscanf(f, "%d", &phieu_nhap_new->value->so_luong);
+  if (!err && fscanf(f, " %[^\n]", phieu_nhap_new->value->ten_hang) != 1) {
+    printf(RED "Loi: Khong doc duoc ten hang tu file!" RESET "\n");
+    err = 1;
+  }
+
+  if (!err && fscanf(f, "%d", &phieu_nhap_new->value->so_luong) != 1) {
+    printf(RED "Loi: So luong trong file khong phai so nguyen!" RESET "\n");
+    err = 1;
+  }
+  if (!err && phieu_nhap_new->value->so_luong < 0) {
+    printf(RED "Loi logic: So luong trong file khong the am (%d)!" RESET "\n", phieu_nhap_new->value->so_luong);
+    err = 1;
+  }
 
   NgayThang date;
-  fscanf(f, "%d %d %d", &date.ngay, &date.thang, &date.nam);
-  phieu_nhap_new->value->ngay_nhap = date;
+  if (!err && fscanf(f, "%d %d %d", &date.ngay, &date.thang, &date.nam) != 3) {
+    printf(RED "Loi: Ngay nhap trong file khong dung dinh dang (ngay thang nam)!" RESET "\n");
+    err = 1;
+  }
+  if (!err) {
+    if (date.nam < 1 || date.thang < 1 || date.thang > 12) {
+      printf(RED "Loi logic: Ngay nhap khong hop le (Nam phai > 0, Thang tu 1 den 12)!" RESET "\n");
+      err = 1;
+    } else {
+      int max_ngay = lay_so_ngay_trong_thang(date.thang, date.nam);
+      if (date.ngay < 1 || date.ngay > max_ngay) {
+        printf(RED "Loi logic: Ngay %02d khong hop le trong thang %02d nam %04d!" RESET "\n", date.ngay, date.thang, date.nam);
+        err = 1;
+      }
+    }
+  }
+  if (!err) {
+    phieu_nhap_new->value->ngay_nhap = date;
+  }
 
-  fscanf(f, " %[^\n]", phieu_nhap_new->value->don_vi);
-  fscanf(f, "%f", &phieu_nhap_new->value->don_gia);
-  fscanf(f, "%d", &phieu_nhap_new->value->thu_muc_id);
+  if (!err && fscanf(f, " %[^\n]", phieu_nhap_new->value->don_vi) != 1) {
+    printf(RED "Loi: Khong doc duoc don vi tu file!" RESET "\n");
+    err = 1;
+  }
+
+  if (!err && fscanf(f, "%f", &phieu_nhap_new->value->don_gia) != 1) {
+    printf(RED "Loi: Don gia trong file khong dung dinh dang!" RESET "\n");
+    err = 1;
+  }
+  if (!err && phieu_nhap_new->value->don_gia < 0.0) {
+    printf(RED "Loi logic: Don gia trong file khong the am (%.2f)!" RESET "\n", phieu_nhap_new->value->don_gia);
+    err = 1;
+  }
+
+  if (!err && fscanf(f, "%d", &phieu_nhap_new->value->thu_muc_id) != 1) {
+    printf(RED "Loi: ID Thu muc trong file khong dung dinh dang!" RESET "\n");
+    err = 1;
+  }
 
 
-  if (check_trung_maHang(phieu_nhap_new->value->ma_hang, danh_sach_hang)){
+  if (!err && check_trung_maHang(phieu_nhap_new->value->ma_hang, danh_sach_hang)){
     printf(RED "Ma hang '%s' da ton tai!" RESET "\n", phieu_nhap_new->value->ma_hang);
     err = 1;
   }
-  if(phieu_nhap_new->value->thu_muc_id > so_thu_muc || phieu_nhap_new->value->thu_muc_id <= 0){
+  if (!err && (phieu_nhap_new->value->thu_muc_id > so_thu_muc || phieu_nhap_new->value->thu_muc_id <= 0)){
     printf(RED "Thu muc co id %d khong ton tai!" RESET "\n",  phieu_nhap_new->value->thu_muc_id);
     err = 1;
   }
@@ -575,7 +628,7 @@ void nhap_hang(){
 }
 
 void tim_kiem_theo_ma_hang(){
-  char ma_hang_tim[40];
+  char ma_hang_tim[100];
   printf("\n--- TIM KIEM MAT HANG THEO MA ---\n");
   printf("Nhap ma hang can tim: ");
   scanf(" %s", ma_hang_tim);
