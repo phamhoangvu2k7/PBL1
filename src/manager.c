@@ -94,6 +94,7 @@ void thong_ke_tong_tien(){
             printf(BOLD CYAN "|" RESET " %-10s " BOLD CYAN "|" RESET " %30.2f " BOLD CYAN "|" RESET "\n", ngay_str, tong_tien_ngay);
         }
 
+        //in ra file out
         if (f != NULL) {
             fprintf(f, "| %-10s | %30.2f |\n", ngay_str, tong_tien_ngay);
         }
@@ -142,7 +143,7 @@ void xoa_mat_hang(){
     }
     fclose(f);
 
-    if (read_status) {
+    if (read_status){
         return;
     }
 
@@ -246,7 +247,8 @@ void quan_ly_thue(){
             FILE *f = fopen("data/out/out_ds_thu_muc.txt", "w");
             if (f == NULL) {
                 printf(RED "Loi: Khong the mo file data/out/out_ds_thu_muc.txt de ghi!" RESET "\n");
-            } else {
+            }
+            else {
                 fprintf(f, "----- DANH SACH THU MUC VA THUE AP DUNG -----\n\n");
                 fprintf(f, "+------+----------------------+------------+\n");
                 fprintf(f, "| %-4s | %-20s | %-10s |\n", "ID", "Ten Thu Muc", "Thue (%)");
@@ -320,6 +322,13 @@ void quan_ly_thue(){
                 if (!format_err && fscanf(f, "%f", &thue_nhap) != 1){
                     printf(BOLD RED "File khong dung dinh dang! (Yeu cau dong thu hai la Thue)" RESET "\n");
                     format_err = 1;
+                }
+
+                for(int i = 0; i< so_thu_muc; i++){
+                    if(string_cmp(ten_thu_muc_nhap,ds_thu_muc[i].ten_thu_muc)){
+                        printf(BOLD RED "Loai thu muc nay da ton tai!" RESET "\n");
+                        format_err = 1;
+                    }
                 }
                 
                 if (!format_err){
@@ -422,10 +431,12 @@ void thong_ke_kho_hang(){
                             "+----------+--------------+------------+------------+-----------------+-----------------+" RESET
                             "\n");
 
+    // mo file out
     FILE *f = fopen("data/out/out_thong_ke_kho_hang.txt", "w");
     if (f == NULL) {
         printf(RED "Loi: Khong the mo file data/out/out_thong_ke_kho_hang.txt de ghi!" RESET "\n");
-    } else {
+    }
+    else{
         fprintf(f, "----- THONG KE KHO HANG -----\n\n");
         fprintf(f, "+----------+--------------------------+------------+------------+----------+--------------+------------+------------+-----------------+-----------------+\n");
         fprintf(f, "| %-8s | %-24s | %-10s | %-10s | %-8s | %-12s | %-10s | %-10s | %-15s | %-15s |\n",
@@ -806,7 +817,9 @@ void sap_xep_danh_sach(){
         FILE *f_sort = fopen("data/out/out_sap_xep_danh_sach.txt", "w");
         if (f_sort == NULL) {
             printf(RED "Loi: Khong the mo file data/out/out_sap_xep_danh_sach.txt de ghi!" RESET "\n");
-        } else {
+        }
+        
+        else {
             fprintf(f_sort, "----- DANH SACH MAT HANG DA SAP XEP -----\n");
             if (lua_chon == 1) fprintf(f_sort, "(Tieu chi sap xep: Thanh tien)\n\n");
             else if (lua_chon == 2) fprintf(f_sort, "(Tieu chi sap xep: Ngay thang nhap)\n\n");
