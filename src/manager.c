@@ -573,6 +573,46 @@ void tao_du_lieu_mau(){
     fclose(f2);
 }
 
+void cap_nhat_du_lieu_mau(){
+    FILE *f1 = fopen("data/data_mau/ds_thu_muc.txt", "w");
+    if (f1 == NULL){
+        printf(RED "Loi: Khong the mo file data/data_mau/ds_thu_muc.txt de cap nhat!" RESET "\n");
+    }
+    else {
+        fprintf(f1, "%d\n", so_thu_muc);
+        for (int i = 0; i < so_thu_muc; i++){
+            fprintf(f1, "%d\n", ds_thu_muc[i].id);
+            fprintf(f1, "%s\n", ds_thu_muc[i].ten_thu_muc);
+            fprintf(f1, "%.2f\n", ds_thu_muc[i].thue);
+        }
+        fclose(f1);
+        printf(GREEN "Da tu dong cap nhat file du lieu mau thu muc!" RESET "\n");
+    }
+
+    FILE *f2 = fopen("data/data_mau/ds_hang.txt", "w");
+    if (f2 == NULL){
+        printf(RED "Loi: Khong the mo file data/data_mau/ds_hang.txt de cap nhat!" RESET "\n");
+    }
+    else {
+        fprintf(f2, "%d\n", so_hang);
+        Node *p = danh_sach_hang;
+        while (p != NULL){
+            fprintf(f2, "%s\n", p->value->ma_hang);
+            fprintf(f2, "%s\n", p->value->ten_hang);
+            fprintf(f2, "%d\n", p->value->so_luong);
+            fprintf(f2, "%d %d %d\n", p->value->ngay_nhap.ngay,
+                                      p->value->ngay_nhap.thang,
+                                      p->value->ngay_nhap.nam);
+            fprintf(f2, "%s\n", p->value->don_vi);
+            fprintf(f2, "%.2f\n", p->value->don_gia);
+            fprintf(f2, "%d\n", p->value->thu_muc_id);
+            p = p->next;
+        }
+        fclose(f2);
+        printf(GREEN "Da tu dong cap nhat file du lieu mau hang hoa!" RESET "\n");
+    }
+}
+
 void thong_ke_thu_muc(){
     printf("\n" BOLD YELLOW "----- THONG KE THU MUC -----" RESET "\n");
     printf(CYAN "+------+----------------------+------------+" RESET "\n");

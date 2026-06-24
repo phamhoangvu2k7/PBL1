@@ -1,197 +1,204 @@
-28
+29
 mh101
 Laptop Dell
 10
 1 10 2026
 cai
-1200
+1200.00
 1
 mh102
 Tivi Sony
 15
 2 10 2026
 cai
-800
+800.00
 2
 mh103
 Ao khoac nam
 50
 3 10 2026
 cai
-150
+150.00
 3
 mh104
 Balo du lich
 30
 4 10 2026
 cai
-250
+250.00
 4
 mh106
 Sua tuoi
 500
 6 10 2026
 hop
-10
+10.00
 5
 mh107
 Thuoc bo mat
 120
 7 10 2026
 hop
-90
+90.00
 6
 mh108
 Ghe xoay
 40
 8 10 2026
 cai
-400
+400.00
 7
 mh109
 Mo hinh Lego
 25
 9 10 2026
 hop
-600
+600.00
 8
 mh110
 Son moi
 80
 10 10 2026
 cai
-350
+350.00
 9
 mh111
 Giay the thao
 45
 11 10 2026
 doi
-700
+700.00
 10
 mh112
 Chuot khong day
 200
 12 10 2026
 cai
-50
+50.00
 4
 mh113
 Ban ui hoi nuoc
 60
 13 10 2026
 cai
-320
+320.00
 2
 mh114
 Dam da hoi
 20
 14 10 2026
 cai
-1200
+1200.00
 3
 mh116
 Op lung iPhone
 300
 16 10 2026
 cai
-25
+25.00
 4
 mh117
 Milo hop
 800
 17 10 2026
 hop
-8
+8.00
 5
 mh118
 Khau trang y te
 1000
 18 10 2026
 hop
-2
+2.00
 6
 mh119
 Ban lam viec
 15
 19 10 2026
 cai
-1500
+1500.00
 7
 mh120
 Dat set tu nhien
 150
 20 10 2026
 hop
-40
+40.00
 8
 mh121
 Kem chong nang
 90
 21 10 2026
 tuyp
-450
+450.00
 9
 mh122
 Vot cau long
 70
 22 10 2026
 cai
-500
+500.00
 10
 mh123
 Tai nghe bluetooth
 110
 23 10 2026
 cai
-650
+650.00
 1
 mh124
 May pha cafe
 8
 24 10 2026
 cai
-3200
+3200.00
 2
 mh126
 Quan short thun
 150
 26 10 2026
 cai
-120
+120.00
 3
 mh127
 Dong ho thong minh
 65
 27 10 2026
 cai
-950
+950.00
 4
 mh128
 Mi an lien
 2000
 28 10 2026
 goi
-4
+4.00
 5
 mh129
 May do huyet ap
 35
 29 10 2026
 cai
-1100
+1100.00
 6
 mh130
 Tu quan ao
 12
 30 10 2026
 cai
-2200
+2200.00
 7
 mh131
 Xe dieu khien
 55
 31 10 2026
 cai
-350
+350.00
 8
+mh500
+May tinh bang
+120
+20 11 2026
+cai
+2500.50
+3

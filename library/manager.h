@@ -14,5 +14,6 @@ void hien_thi_thong_tin_du_an();
 
 void nhap_hang();
 void tao_du_lieu_mau();
+void cap_nhat_du_lieu_mau();
 
 #endif

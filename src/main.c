@@ -55,6 +55,7 @@ int main() {
       sap_xep_danh_sach();
       break;
     case 0:
+      cap_nhat_du_lieu_mau();
       printf("He thong da dong.\n");
       break;
     default:
